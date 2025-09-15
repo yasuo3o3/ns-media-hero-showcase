@@ -75,6 +75,24 @@ class NSMHS_Config {
                 $item['type'] = in_array($media['type'] ?? '', ['image', 'video']) ? $media['type'] : 'image';
                 $item['src'] = esc_url_raw($media['src'] ?? '');
 
+                // Validate MIME type
+                $mime = $media['mime'] ?? '';
+                $allowed_mimes = [
+                    'image/jpeg', 'image/png', 'image/webp', 'image/gif',
+                    'video/mp4', 'video/webm', 'video/ogg'
+                ];
+
+                if (in_array($mime, $allowed_mimes)) {
+                    $item['mime'] = $mime;
+
+                    // Auto-set type based on MIME
+                    if (strpos($mime, 'image/') === 0) {
+                        $item['type'] = 'image';
+                    } elseif (strpos($mime, 'video/') === 0) {
+                        $item['type'] = 'video';
+                    }
+                }
+
                 if ($item['type'] === 'video') {
                     $item['poster'] = esc_url_raw($media['poster'] ?? '');
                 }

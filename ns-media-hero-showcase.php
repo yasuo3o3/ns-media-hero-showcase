@@ -94,6 +94,9 @@ class NSMediaHeroShowcase {
             return;
         }
 
+        // Enqueue media scripts for media library picker
+        wp_enqueue_media();
+
         wp_enqueue_style(
             'nsmhs-admin',
             NSMHS_PLUGIN_URL . 'admin/assets/admin.css',
@@ -104,7 +107,7 @@ class NSMediaHeroShowcase {
         wp_enqueue_script(
             'nsmhs-admin',
             NSMHS_PLUGIN_URL . 'admin/assets/admin.js',
-            ['jquery'],
+            ['jquery', 'media-upload', 'media-views'],
             NSMHS_VERSION,
             true
         );

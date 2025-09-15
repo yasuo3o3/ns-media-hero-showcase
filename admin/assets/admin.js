@@ -2,6 +2,7 @@
  * NS Media Hero Showcase Admin JavaScript
  *
  * Handles the admin interface functionality including:
+ * - Media library picker integration
  * - Media item management (add, remove, sort)
  * - Form handling and AJAX submissions
  * - Range slider updates
@@ -41,15 +42,148 @@
                 this.removeMediaItem($(e.target).closest('.nsmhs-media-item'));
             });
 
-            // Media type change handler (delegated)
-            $(document).on('change', '.nsmhs-media-type', (e) => {
-                this.handleMediaTypeChange($(e.target));
+            // Media selection handlers (delegated)
+            $(document).on('click', '.nsmhs-select-media', (e) => {
+                e.preventDefault();
+                this.openMediaPicker($(e.target).closest('.nsmhs-media-item'), 'media');
+            });
+
+            $(document).on('click', '.nsmhs-clear-media', (e) => {
+                e.preventDefault();
+                this.clearMedia($(e.target).closest('.nsmhs-media-item'));
+            });
+
+            // Poster selection handlers (delegated)
+            $(document).on('click', '.nsmhs-select-poster', (e) => {
+                e.preventDefault();
+                this.openMediaPicker($(e.target).closest('.nsmhs-media-item'), 'poster');
+            });
+
+            $(document).on('click', '.nsmhs-clear-poster', (e) => {
+                e.preventDefault();
+                this.clearPoster($(e.target).closest('.nsmhs-media-item'));
             });
 
             // Range slider handlers (delegated)
             $(document).on('input', 'input[type="range"]', (e) => {
                 this.updateRangeValue($(e.target));
             });
+        }
+
+        openMediaPicker($item, purpose) {
+            const mediaFrame = wp.media({
+                title: purpose === 'poster' ? 'ポスターを選択' : 'メディアを選択',
+                library: {
+                    type: purpose === 'poster' ? ['image'] : ['image', 'video']
+                },
+                multiple: false,
+                button: {
+                    text: '選択'
+                }
+            });
+
+            // When media is selected
+            mediaFrame.on('select', () => {
+                const attachment = mediaFrame.state().get('selection').first().toJSON();
+
+                if (purpose === 'poster') {
+                    this.setPosterMedia($item, attachment);
+                } else {
+                    this.setMainMedia($item, attachment);
+                }
+            });
+
+            mediaFrame.open();
+        }
+
+        setMainMedia($item, attachment) {
+            const type = attachment.type === 'image' ? 'image' : 'video';
+
+            // Update hidden fields
+            $item.find('.nsmhs-media-type').val(type);
+            $item.find('.nsmhs-media-src').val(attachment.url);
+            $item.find('.nsmhs-media-mime').val(attachment.mime || '');
+
+            // Update type display
+            $item.find('.nsmhs-media-type-display').text(type === 'image' ? '画像' : '動画');
+
+            // Show preview
+            this.updateMediaPreview($item, attachment, type);
+
+            // Show/hide poster section
+            if (type === 'video') {
+                $item.find('.nsmhs-poster-section').show();
+            } else {
+                $item.find('.nsmhs-poster-section').hide();
+                this.clearPoster($item);
+            }
+
+            // Show clear button
+            $item.find('.nsmhs-clear-media').show();
+        }
+
+        setPosterMedia($item, attachment) {
+            // Update poster field
+            $item.find('.nsmhs-media-poster').val(attachment.url);
+
+            // Update poster preview
+            const $posterPreview = $item.find('.nsmhs-poster-preview');
+            $posterPreview.find('img').attr('src', attachment.url).attr('alt', attachment.alt || '');
+            $posterPreview.show();
+
+            // Show clear poster button
+            $item.find('.nsmhs-clear-poster').show();
+        }
+
+        updateMediaPreview($item, attachment, type) {
+            const $preview = $item.find('.nsmhs-media-preview');
+
+            if (type === 'image') {
+                const $imagePreview = $item.find('.nsmhs-preview-image');
+                $imagePreview.find('img').attr('src', attachment.url).attr('alt', attachment.alt || '');
+                $imagePreview.show();
+                $item.find('.nsmhs-preview-video').hide();
+            } else {
+                const $videoPreview = $item.find('.nsmhs-preview-video');
+                const extension = this.getFileExtension(attachment.url);
+                $videoPreview.find('.nsmhs-video-extension').text(extension);
+                $videoPreview.show();
+                $item.find('.nsmhs-preview-image').hide();
+            }
+
+            $preview.show();
+        }
+
+        getFileExtension(url) {
+            const match = url.match(/\.([^.]+)$/);
+            return match ? match[1].toUpperCase() : 'VIDEO';
+        }
+
+        clearMedia($item) {
+            // Clear main media fields
+            $item.find('.nsmhs-media-type').val('image');
+            $item.find('.nsmhs-media-src').val('');
+            $item.find('.nsmhs-media-mime').val('');
+
+            // Reset type display
+            $item.find('.nsmhs-media-type-display').text('画像');
+
+            // Hide preview and clear button
+            $item.find('.nsmhs-media-preview').hide();
+            $item.find('.nsmhs-clear-media').hide();
+
+            // Hide poster section and clear poster
+            $item.find('.nsmhs-poster-section').hide();
+            this.clearPoster($item);
+        }
+
+        clearPoster($item) {
+            // Clear poster field
+            $item.find('.nsmhs-media-poster').val('');
+
+            // Hide poster preview and clear button
+            $item.find('.nsmhs-poster-preview').hide();
+            $item.find('.nsmhs-clear-poster').hide();
         }
 
         populateMediaList() {
@@ -84,43 +218,49 @@
             const $item = $(html);
 
             // Populate data if provided
-            if (mediaData) {
-                $item.find('.nsmhs-media-type').val(mediaData.type || 'image');
-                $item.find('.nsmhs-media-src').val(mediaData.src || '');
-                if (mediaData.poster) {
-                    $item.find('.nsmhs-media-poster').val(mediaData.poster);
-                }
+            if (mediaData && mediaData.src) {
+                const type = mediaData.type || 'image';
 
-                // Show/hide poster field based on type
-                this.handleMediaTypeChange($item.find('.nsmhs-media-type'));
+                // Set form data
+                $item.find('.nsmhs-media-type').val(type);
+                $item.find('.nsmhs-media-src').val(mediaData.src);
+                $item.find('.nsmhs-media-mime').val(mediaData.mime || '');
+
+                // Update display
+                $item.find('.nsmhs-media-type-display').text(type === 'image' ? '画像' : '動画');
+
+                // Create attachment-like object for preview
+                const attachment = {
+                    url: mediaData.src,
+                    type: type,
+                    mime: mediaData.mime || ''
+                };
+
+                this.updateMediaPreview($item, attachment, type);
+                $item.find('.nsmhs-clear-media').show();
+
+                // Handle poster for videos
+                if (type === 'video') {
+                    $item.find('.nsmhs-poster-section').show();
+
+                    if (mediaData.poster) {
+                        $item.find('.nsmhs-media-poster').val(mediaData.poster);
+                        const $posterPreview = $item.find('.nsmhs-poster-preview');
+                        $posterPreview.find('img').attr('src', mediaData.poster);
+                        $posterPreview.show();
+                        $item.find('.nsmhs-clear-poster').show();
+                    }
+                }
             }
 
             $mediaList.append($item);
             this.updateMediaIndices();
-
-            // Focus on the new item's source input
-            setTimeout(() => {
-                $item.find('.nsmhs-media-src').focus();
-            }, 100);
         }
 
         removeMediaItem($item) {
             if (confirm(nsmhs_admin.strings.delete_confirm)) {
                 $item.remove();
                 this.updateMediaIndices();
-            }
-        }
-
-        handleMediaTypeChange($select) {
-            const $item = $select.closest('.nsmhs-media-item');
-            const $posterField = $item.find('.nsmhs-poster-field');
-            const type = $select.val();
-
-            if (type === 'video') {
-                $posterField.show();
-            } else {
-                $posterField.hide();
-                $posterField.find('input').val('');
             }
         }
 
@@ -132,6 +272,7 @@
                 // Update input names
                 $item.find('.nsmhs-media-type').attr('name', `media[${index}][type]`);
                 $item.find('.nsmhs-media-src').attr('name', `media[${index}][src]`);
+                $item.find('.nsmhs-media-mime').attr('name', `media[${index}][mime]`);
                 $item.find('.nsmhs-media-poster').attr('name', `media[${index}][poster]`);
             });
         }
@@ -219,17 +360,20 @@
             // Collect media items
             $('.nsmhs-media-item').each((index, item) => {
                 const $item = $(item);
-                const mediaItem = {
-                    type: $item.find('.nsmhs-media-type').val(),
-                    src: $item.find('.nsmhs-media-src').val()
-                };
+                const src = $item.find('.nsmhs-media-src').val();
 
-                const poster = $item.find('.nsmhs-media-poster').val();
-                if (poster && mediaItem.type === 'video') {
-                    mediaItem.poster = poster;
-                }
+                if (src) {
+                    const mediaItem = {
+                        type: $item.find('.nsmhs-media-type').val(),
+                        src: src,
+                        mime: $item.find('.nsmhs-media-mime').val()
+                    };
 
-                if (mediaItem.src) {
+                    const poster = $item.find('.nsmhs-media-poster').val();
+                    if (poster && mediaItem.type === 'video') {
+                        mediaItem.poster = poster;
+                    }
+
                     data.media.push(mediaItem);
                 }
             });

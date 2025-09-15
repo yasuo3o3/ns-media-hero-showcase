@@ -231,21 +231,51 @@ class NSMHS_SettingsPage {
                 <div class="nsmhs-media-item" data-index="{{index}}">
                     <div class="nsmhs-media-header">
                         <span class="nsmhs-media-drag">⋮⋮</span>
-                        <select class="nsmhs-media-type" name="media[{{index}}][type]">
-                            <option value="image">画像</option>
-                            <option value="video">動画</option>
-                        </select>
+                        <span class="nsmhs-media-type-display">画像</span>
                         <button type="button" class="nsmhs-media-remove button-link-delete">削除</button>
                     </div>
                     <div class="nsmhs-media-fields">
-                        <label>
-                            URL:
-                            <input type="url" name="media[{{index}}][src]" class="nsmhs-media-src regular-text" placeholder="画像/動画のURL">
-                        </label>
-                        <label class="nsmhs-poster-field" style="display: none;">
-                            ポスター:
-                            <input type="url" name="media[{{index}}][poster]" class="nsmhs-media-poster regular-text" placeholder="動画のポスター画像URL">
-                        </label>
+                        <!-- Hidden fields for data storage -->
+                        <input type="hidden" name="media[{{index}}][type]" class="nsmhs-media-type" value="image">
+                        <input type="hidden" name="media[{{index}}][src]" class="nsmhs-media-src" value="">
+                        <input type="hidden" name="media[{{index}}][mime]" class="nsmhs-media-mime" value="">
+                        <input type="hidden" name="media[{{index}}][poster]" class="nsmhs-media-poster" value="">
+
+                        <!-- Media selection UI -->
+                        <div class="nsmhs-media-selection">
+                            <button type="button" class="button nsmhs-select-media" aria-label="メディアを選択">
+                                メディアを選択
+                            </button>
+                            <button type="button" class="button nsmhs-clear-media" aria-label="クリア" style="display: none;">
+                                クリア
+                            </button>
+                        </div>
+
+                        <!-- Media preview -->
+                        <div class="nsmhs-media-preview" style="display: none;">
+                            <div class="nsmhs-preview-image" style="display: none;">
+                                <img src="" alt="" style="max-width: 150px; max-height: 100px;">
+                            </div>
+                            <div class="nsmhs-preview-video" style="display: none;">
+                                <span class="nsmhs-video-placeholder">🎬 動画ファイル: <span class="nsmhs-video-extension"></span></span>
+                            </div>
+                        </div>
+
+                        <!-- Poster selection for videos -->
+                        <div class="nsmhs-poster-section" style="display: none;">
+                            <label>ポスター画像（任意）:</label>
+                            <div class="nsmhs-poster-selection">
+                                <button type="button" class="button nsmhs-select-poster" aria-label="ポスターを選択">
+                                    ポスターを選択
+                                </button>
+                                <button type="button" class="button nsmhs-clear-poster" aria-label="ポスターをクリア" style="display: none;">
+                                    クリア
+                                </button>
+                            </div>
+                            <div class="nsmhs-poster-preview" style="display: none;">
+                                <img src="" alt="" style="max-width: 150px; max-height: 100px;">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </script>
