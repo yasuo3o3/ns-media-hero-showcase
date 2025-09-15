@@ -432,7 +432,7 @@ class NSMHS_SettingsPage {
                 const heroes = document.querySelectorAll('.ns-hero, .nsmhs-hero-showcase');
 
                 if (heroes.length === 0) {
-                    console.warn('NSMHS Layer Debug: No hero elements found');
+                    console.log('NSMHS Layer Debug: No hero elements found (expected in admin)');
                     return;
                 }
 
@@ -504,7 +504,8 @@ class NSMHS_SettingsPage {
                 console.log(`Found ${heroes.length} hero elements:`, heroes);
 
                 if (heroes.length === 0) {
-                    console.warn('⚠️ No hero elements found! Layer debug controls will not work.');
+                    console.log('ℹ️ No hero elements found in admin page (expected)');
+                    console.log('💡 To test layer controls: Go to frontend page with hero elements');
                     console.log('Expected elements: .ns-hero or .nsmhs-hero-showcase');
                     console.groupEnd();
                     return;
