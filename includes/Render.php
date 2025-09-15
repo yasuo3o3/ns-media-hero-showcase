@@ -156,6 +156,15 @@ class NSMHS_Render {
     }
 
     private function generate_css_vars($settings) {
+        $pc_grid = $this->config->parse_grid($settings['grids']['pc']);
+        $tablet_grid = $this->config->parse_grid($settings['grids']['tablet']);
+        $phone_grid = $this->config->parse_grid($settings['grids']['phone']);
+
+        // グリッド設定に基づくaspect-ratio計算（16:9の各タイルベース）
+        $pc_aspect_ratio = ($pc_grid['cols'] * 16) . '/' . ($pc_grid['rows'] * 9);
+        $tablet_aspect_ratio = ($tablet_grid['cols'] * 16) . '/' . ($tablet_grid['rows'] * 9);
+        $phone_aspect_ratio = ($phone_grid['cols'] * 16) . '/' . ($phone_grid['rows'] * 9);
+
         $vars = [
             '--nsmhs-display-duration' => $settings['timing']['displayDuration'] . 'ms',
             '--nsmhs-zoom-in-duration' => $settings['timing']['zoomInDuration'] . 'ms',
@@ -166,12 +175,15 @@ class NSMHS_Render {
             '--nsmhs-shadow-strength' => $settings['layers']['mid']['shadowStrength'],
             '--overlay-opacity' => $settings['layers']['mid']['overlay']['opacity'],
             '--overlay-blend' => $settings['layers']['mid']['overlay']['blendMode'],
-            '--nsmhs-pc-cols' => $this->config->parse_grid($settings['grids']['pc'])['cols'],
-            '--nsmhs-pc-rows' => $this->config->parse_grid($settings['grids']['pc'])['rows'],
-            '--nsmhs-tablet-cols' => $this->config->parse_grid($settings['grids']['tablet'])['cols'],
-            '--nsmhs-tablet-rows' => $this->config->parse_grid($settings['grids']['tablet'])['rows'],
-            '--nsmhs-phone-cols' => $this->config->parse_grid($settings['grids']['phone'])['cols'],
-            '--nsmhs-phone-rows' => $this->config->parse_grid($settings['grids']['phone'])['rows']
+            '--nsmhs-pc-cols' => $pc_grid['cols'],
+            '--nsmhs-pc-rows' => $pc_grid['rows'],
+            '--nsmhs-pc-aspect-ratio' => $pc_aspect_ratio,
+            '--nsmhs-tablet-cols' => $tablet_grid['cols'],
+            '--nsmhs-tablet-rows' => $tablet_grid['rows'],
+            '--nsmhs-tablet-aspect-ratio' => $tablet_aspect_ratio,
+            '--nsmhs-phone-cols' => $phone_grid['cols'],
+            '--nsmhs-phone-rows' => $phone_grid['rows'],
+            '--nsmhs-phone-aspect-ratio' => $phone_aspect_ratio
         ];
 
         $css_string = '';
