@@ -21,7 +21,7 @@
 .nsmhs-hero-showcase {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
+  height: calc(100vw / 16 * 9 / var(--nsmhs-pc-cols) * var(--nsmhs-pc-rows));
   overflow: hidden;
   background: #000;
 }
