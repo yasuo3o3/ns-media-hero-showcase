@@ -160,6 +160,11 @@ tags/ export-ignore
 branches/ export-ignore
 trunk/ export-ignore
 
+docs/ export-ignore
+
 # Claude Code specific
 .claude/ export-ignore
 .history/ export-ignore
+
+debug-tools/ export-ignore
+

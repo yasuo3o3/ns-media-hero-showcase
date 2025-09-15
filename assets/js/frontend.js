@@ -233,48 +233,77 @@
             this.zoomContent.innerHTML = '';
             this.zoomContent.appendChild(mediaClone);
 
-            // Calculate zoom transform
-            const tileRect = tile.element.getBoundingClientRect();
-            const containerRect = this.element.getBoundingClientRect();
+            // Use requestAnimationFrame to ensure fresh rect calculations
+            requestAnimationFrame(() => {
+                // Check if zoom-from-tile feature is enabled
+                const style = getComputedStyle(this.element);
+                const zoomFromTile = parseInt(style.getPropertyValue('--nsmhs-zoom-from-tile')) === 1;
 
-            const scale = Math.max(containerRect.width / tileRect.width, containerRect.height / tileRect.height);
+                // Calculate positions and scales
+                const tileRect = tile.element.getBoundingClientRect();
+                const containerRect = this.element.getBoundingClientRect();
 
-            // Set dimensions
-            this.zoomContent.style.width = `${containerRect.width}px`;
-            this.zoomContent.style.height = `${containerRect.height}px`;
+                // Set dimensions
+                this.zoomContent.style.width = `${containerRect.width}px`;
+                this.zoomContent.style.height = `${containerRect.height}px`;
 
-            // Initial state: tile position with opacity and blur
-            this.zoomContent.style.transform = `translate(${tileRect.left - containerRect.left}px, ${tileRect.top - containerRect.top}px) scale(${1/scale})`;
-            this.zoomContent.style.opacity = '0';
-            this.zoomContent.style.filter = `blur(var(--nsmhs-blur))`;
+                let initialTransform, initialOpacity, initialFilter;
 
-            // Show zoom content
-            this.zoomContent.classList.add('nsmhs-active');
+                if (zoomFromTile) {
+                    // New tile-to-center animation
+                    const tileCenterX = tileRect.left + tileRect.width / 2;
+                    const tileCenterY = tileRect.top + tileRect.height / 2;
+                    const containerCenterX = containerRect.left + containerRect.width / 2;
+                    const containerCenterY = containerRect.top + containerRect.height / 2;
 
-            // Apply tile effects during zoom
-            tile.element.classList.add('nsmhs-zooming');
+                    const deltaX = containerCenterX - tileCenterX;
+                    const deltaY = containerCenterY - tileCenterY;
+                    const scaleFromTile = Math.min(tileRect.width / containerRect.width, tileRect.height / containerRect.height);
 
-            // Animate to full screen
-            setTimeout(() => {
-                if (this.isPaused) return;
+                    initialTransform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleFromTile})`;
+                    initialOpacity = '0';
+                    initialFilter = `blur(var(--nsmhs-blur, 8px))`;
+                } else {
+                    // Original large-to-normal animation
+                    const scale = Math.max(containerRect.width / tileRect.width, containerRect.height / tileRect.height);
+                    initialTransform = `translate(${tileRect.left - containerRect.left}px, ${tileRect.top - containerRect.top}px) scale(${1/scale})`;
+                    initialOpacity = '0';
+                    initialFilter = `blur(var(--nsmhs-blur, 8px))`;
+                }
 
-                const duration = this.prefersReducedMotion ? 300 : this.settings.timing.zoomInDuration;
+                // Set initial state
+                this.zoomContent.style.transform = initialTransform;
+                this.zoomContent.style.opacity = initialOpacity;
+                this.zoomContent.style.filter = initialFilter;
 
-                this.zoomContent.style.transition = `transform ${duration}ms var(--nsmhs-easing), opacity ${duration}ms var(--nsmhs-easing), filter ${duration}ms var(--nsmhs-easing)`;
-                this.zoomContent.style.transform = `translate(0px, 0px) scale(1)`;
-                this.zoomContent.style.opacity = '1';
-                this.zoomContent.style.filter = 'none';
+                // Show zoom content
+                this.zoomContent.classList.add('nsmhs-active');
 
-                // Start video after animation begins
-                this.startMediaPlayback(mediaClone);
+                // Apply tile effects during zoom
+                tile.element.classList.add('nsmhs-zooming');
 
-                // Hold at full screen
-                this.timeoutId = setTimeout(() => {
+                // Animate to full screen
+                setTimeout(() => {
                     if (this.isPaused) return;
-                    this.zoomOut(tile);
-                }, this.settings.timing.displayDuration);
 
-            }, 50);
+                    const duration = this.prefersReducedMotion ? 300 : this.settings.timing.zoomInDuration;
+
+                    this.zoomContent.style.transition = `transform ${duration}ms var(--nsmhs-easing), opacity ${duration}ms var(--nsmhs-easing), filter ${duration}ms var(--nsmhs-easing)`;
+                    this.zoomContent.style.transform = `translate(0px, 0px) scale(1)`;
+                    this.zoomContent.style.opacity = '1';
+                    this.zoomContent.style.filter = 'none';
+
+                    // Start video after animation begins
+                    this.startMediaPlayback(mediaClone);
+
+                    // Hold at full screen
+                    this.timeoutId = setTimeout(() => {
+                        if (this.isPaused) return;
+                        this.zoomOut(tile);
+                    }, this.settings.timing.displayDuration);
+
+                }, 50);
+            });
         }
 
         zoomOut(tile) {
