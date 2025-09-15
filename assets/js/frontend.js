@@ -76,6 +76,7 @@
             this.setupIntersectionObserver();
             this.setupVisibilityHandling();
             this.setupReducedMotionHandling();
+            this.setupResizeObserver();
             this.initializeOverlay();
 
             // Start the animation if tiles are available
@@ -143,6 +144,7 @@
                     this.pauseAnimation();
                     this.stopOverlay();
                 } else if (this.isVisible) {
+                    this.recalculateLayout();
                     this.resumeAnimation();
                     this.startOverlay();
                 }
@@ -187,6 +189,22 @@
             this.nextTile();
         }
 
+        setupResizeObserver() {
+            if ('ResizeObserver' in window) {
+                this.resizeObserver = new ResizeObserver(() => {
+                    if (this.zoomContent.classList.contains('nsmhs-active')) {
+                        this.resetZoom();
+                    }
+                    this.recalculateLayout();
+                });
+                this.resizeObserver.observe(this.element);
+            }
+        }
+
+        recalculateLayout() {
+            this.collectTiles();
+        }
+
         stopAnimation() {
             this.isPlaying = false;
             this.isPaused = false;
@@ -215,30 +233,36 @@
             this.zoomContent.innerHTML = '';
             this.zoomContent.appendChild(mediaClone);
 
-            // Calculate zoom transform
+            // Calculate zoom transform with center-based FLIP
             const tileRect = tile.element.getBoundingClientRect();
             const containerRect = this.element.getBoundingClientRect();
 
-            const scaleX = containerRect.width / tileRect.width;
-            const scaleY = containerRect.height / tileRect.height;
-            const scale = Math.max(scaleX, scaleY);
+            const scale = Math.max(containerRect.width / tileRect.width, containerRect.height / tileRect.height);
 
-            const translateX = (containerRect.width / 2) - (tileRect.left - containerRect.left + tileRect.width / 2);
-            const translateY = (containerRect.height / 2) - (tileRect.top - containerRect.top + tileRect.height / 2);
+            // Center coordinates
+            const tileCenterX = tileRect.left + tileRect.width / 2;
+            const tileCenterY = tileRect.top + tileRect.height / 2;
+            const containerCenterX = containerRect.left + containerRect.width / 2;
+            const containerCenterY = containerRect.top + containerRect.height / 2;
 
-            // Apply initial transform (tile position)
-            this.zoomContent.style.transform = `translate(${tileRect.left - containerRect.left}px, ${tileRect.top - containerRect.top}px) scale(${1/scale})`;
-            this.zoomContent.style.width = `${tileRect.width * scale}px`;
-            this.zoomContent.style.height = `${tileRect.height * scale}px`;
+            const translateX = (containerRect.width / 2) - (tileCenterX - containerRect.left);
+            const translateY = (containerRect.height / 2) - (tileCenterY - containerRect.top);
+
+            // Set transform-origin and dimensions
+            this.zoomContent.style.transformOrigin = 'center center';
+            this.zoomContent.style.width = `${containerRect.width}px`;
+            this.zoomContent.style.height = `${containerRect.height}px`;
+
+            // Initial transform: tile center position with inverse scale
+            const initialTranslateX = tileCenterX - containerCenterX;
+            const initialTranslateY = tileCenterY - containerCenterY;
+            this.zoomContent.style.transform = `translate(${initialTranslateX}px, ${initialTranslateY}px) scale(${1/scale})`;
 
             // Show zoom content
             this.zoomContent.classList.add('nsmhs-active');
 
             // Apply tile effects during zoom
             tile.element.classList.add('nsmhs-zooming');
-
-            // Start video if applicable
-            this.startMediaPlayback(mediaClone);
 
             // Animate to full screen
             setTimeout(() => {
@@ -247,7 +271,10 @@
                 const duration = this.prefersReducedMotion ? 300 : this.settings.timing.zoomInDuration;
 
                 this.zoomContent.style.transition = `transform ${duration}ms var(--nsmhs-easing)`;
-                this.zoomContent.style.transform = `translate(${translateX}px, ${translateY}px) scale(1)`;
+                this.zoomContent.style.transform = `translate(0px, 0px) scale(1)`;
+
+                // Start video after animation begins
+                this.startMediaPlayback(mediaClone);
 
                 // Hold at full screen
                 this.timeoutId = setTimeout(() => {

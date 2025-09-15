@@ -21,7 +21,7 @@
 .nsmhs-hero-showcase {
   position: relative;
   width: 100%;
-  height: calc(100vw / 16 * 9 / var(--nsmhs-pc-cols) * var(--nsmhs-pc-rows));
+  aspect-ratio: 16/9;
   overflow: hidden;
   background: #000;
 }
@@ -33,9 +33,10 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100vw / 16 * 9 / var(--nsmhs-pc-cols) * var(--nsmhs-pc-rows));
+  height: 100%;
   display: grid;
-  gap: 0;
+  gap: var(--gap, 0px);
+  grid-auto-flow: dense;
   z-index: 1;
 }
 
@@ -44,35 +45,23 @@
   .ns-hero__tiles,
   .nsmhs-tiles-container {
     grid-template-columns: repeat(var(--nsmhs-pc-cols), 1fr);
-    grid-template-rows: repeat(var(--nsmhs-pc-rows), 1fr);
+    grid-auto-rows: calc((100% - (var(--gap, 0px) * (var(--nsmhs-pc-rows) - 1))) / var(--nsmhs-pc-rows));
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  .ns-hero,
-  .nsmhs-hero-showcase {
-    height: calc(100vw / 16 * 9 / var(--nsmhs-tablet-cols) * var(--nsmhs-tablet-rows));
-  }
-
   .ns-hero__tiles,
   .nsmhs-tiles-container {
-    height: calc(100vw / 16 * 9 / var(--nsmhs-tablet-cols) * var(--nsmhs-tablet-rows));
     grid-template-columns: repeat(var(--nsmhs-tablet-cols), 1fr);
-    grid-template-rows: repeat(var(--nsmhs-tablet-rows), 1fr);
+    grid-auto-rows: calc((100% - (var(--gap, 0px) * (var(--nsmhs-tablet-rows) - 1))) / var(--nsmhs-tablet-rows));
   }
 }
 
 @media (max-width: 767px) {
-  .ns-hero,
-  .nsmhs-hero-showcase {
-    height: calc(100vw / 16 * 9 / var(--nsmhs-phone-cols) * var(--nsmhs-phone-rows));
-  }
-
   .ns-hero__tiles,
   .nsmhs-tiles-container {
-    height: calc(100vw / 16 * 9 / var(--nsmhs-phone-cols) * var(--nsmhs-phone-rows));
     grid-template-columns: repeat(var(--nsmhs-phone-cols), 1fr);
-    grid-template-rows: repeat(var(--nsmhs-phone-rows), 1fr);
+    grid-auto-rows: calc((100% - (var(--gap, 0px) * (var(--nsmhs-phone-rows) - 1))) / var(--nsmhs-phone-rows));
   }
 }
 
@@ -106,7 +95,7 @@
 
 /* Zoom Container */
 .nsmhs-zoom-container {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
@@ -118,11 +107,12 @@
 
 .nsmhs-zoom-content {
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 50%;
+  left: 50%;
   width: 100%;
   height: 100%;
   transform-origin: center center;
+  will-change: transform;
   opacity: 0;
   visibility: hidden;
   transition: opacity var(--nsmhs-zoom-in-duration) var(--nsmhs-easing),
