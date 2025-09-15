@@ -16,17 +16,17 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
 
     // 密度に応じた粒子数（見やすさ重視で調整）
     const particleCounts = {
-        low: 50,
+        low: 40,
         medium: 60,
-        high: 70
+        high: 80
     };
 
     // 粒子クラス
     class Particle {
         constructor() {
             this.reset();
-            this.vx = (Math.random() - 0.5) * (0.3 + Math.random() * 0.2) * speed;
-            this.vy = (Math.random() - 0.5) * (0.3 + Math.random() * 0.2) * speed;
+            this.vx = (Math.random() - 0.5) * (0.8 + Math.random() * 0.4) * speed;
+            this.vy = (Math.random() - 0.5) * (0.8 + Math.random() * 0.4) * speed;
             this.size = 2 + Math.random() * 2; // 2~4px
         }
 
@@ -80,7 +80,7 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
                     ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-                    ctx.lineWidth = 0.75 * currentPixelRatio; // 0.5~1pxの中間値
+                    ctx.lineWidth = 1.2 * currentPixelRatio; // 太くした線幅
                     ctx.stroke();
                 }
             }
