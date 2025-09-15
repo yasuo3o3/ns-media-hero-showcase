@@ -147,7 +147,14 @@ class NSMediaHeroShowcase {
                 'mid' => [
                     'enabled' => true,
                     'shadowStrength' => 0.25,
-                    'overlayVideoSrc' => ''
+                    'overlayVideoSrc' => '',
+                    'overlay' => [
+                        'type' => 'soft-waves',
+                        'opacity' => 0.25,
+                        'speed' => 1,
+                        'density' => 'medium',
+                        'blendMode' => 'normal'
+                    ]
                 ],
                 'top' => [
                     'title' => '',
