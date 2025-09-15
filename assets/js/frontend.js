@@ -496,6 +496,49 @@
             }
         }
 
+        // Layer Debug Controls
+        setLayerFlags(flags) {
+            // flags: {tiles, zoom, pattern, overlay, ui} - each should be 0 or 1
+            const defaults = {tiles: 1, zoom: 1, pattern: 1, overlay: 1, ui: 1};
+            const settings = {...defaults, ...flags};
+
+            // Set data attributes
+            this.element.setAttribute('data-layer-tiles', String(settings.tiles));
+            this.element.setAttribute('data-layer-zoom', String(settings.zoom));
+            this.element.setAttribute('data-layer-pattern', String(settings.pattern));
+            this.element.setAttribute('data-layer-overlay', String(settings.overlay));
+            this.element.setAttribute('data-layer-ui', String(settings.ui));
+
+            // Stop processes for disabled layers
+            if (settings.overlay === 0) {
+                this.stopOverlay();
+            }
+
+            if (settings.zoom === 0) {
+                this.pauseAnimation();
+                this.resetZoom();
+            }
+
+            // Restart if layers are re-enabled and visible
+            if (settings.overlay === 1 && this.isVisible && !this.prefersReducedMotion) {
+                this.startOverlay();
+            }
+
+            if (settings.zoom === 1 && this.isVisible && !this.isPaused) {
+                this.resumeAnimation();
+            }
+        }
+
+        getLayerFlags() {
+            return {
+                tiles: parseInt(this.element.getAttribute('data-layer-tiles')) || 1,
+                zoom: parseInt(this.element.getAttribute('data-layer-zoom')) || 1,
+                pattern: parseInt(this.element.getAttribute('data-layer-pattern')) || 1,
+                overlay: parseInt(this.element.getAttribute('data-layer-overlay')) || 1,
+                ui: parseInt(this.element.getAttribute('data-layer-ui')) || 1
+            };
+        }
+
         destroy() {
             this.stopAnimation();
             this.stopOverlay();

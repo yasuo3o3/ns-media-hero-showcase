@@ -481,3 +481,19 @@
     color: black;
   }
 }
+
+/* Layer Debug Controls - data attribute based visibility */
+.ns-hero[data-layer-tiles="0"] .nsmhs-tiles-container,
+.nsmhs-hero-showcase[data-layer-tiles="0"] .nsmhs-tiles-container { display: none !important; }
+
+.ns-hero[data-layer-zoom="0"] .nsmhs-zoom-container,
+.nsmhs-hero-showcase[data-layer-zoom="0"] .nsmhs-zoom-container { display: none !important; }
+
+.ns-hero[data-layer-pattern="0"] .nsmhs-mid-pattern,
+.nsmhs-hero-showcase[data-layer-pattern="0"] .nsmhs-mid-pattern { display: none !important; }
+
+.ns-hero[data-layer-overlay="0"] .nsmhs-overlay,
+.nsmhs-hero-showcase[data-layer-overlay="0"] .nsmhs-overlay { display: none !important; }
+
+.ns-hero[data-layer-ui="0"] .nsmhs-top-layer,
+.nsmhs-hero-showcase[data-layer-ui="0"] .nsmhs-top-layer { display: none !important; }

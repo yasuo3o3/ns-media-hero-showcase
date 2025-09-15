@@ -38,7 +38,12 @@ class NSMHS_Render {
              class="ns-hero"
              role="region"
              aria-label="<?php echo esc_attr__('Hero showcase', 'ns-media-hero-showcase'); ?>"
-             style="<?php echo esc_attr($css_vars); ?>">
+             style="<?php echo esc_attr($css_vars); ?>"
+             data-layer-tiles="1"
+             data-layer-zoom="1"
+             data-layer-pattern="1"
+             data-layer-overlay="1"
+             data-layer-ui="1">
 
             <!-- Media Tiles Container -->
             <div class="nsmhs-tiles-container">

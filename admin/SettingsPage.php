@@ -162,7 +162,7 @@ class NSMHS_SettingsPage {
                     <div class="nsmhs-section">
                         <h2><?php echo esc_html(__('レイヤー設定', 'ns-media-hero-showcase')); ?></h2>
 
-                        <h3><?php echo esc_html(__('中間レイヤー', 'ns-media-hero-showcase')); ?></h3>
+                        <h3><?php echo esc_html(__('パターン', 'ns-media-hero-showcase')); ?></h3>
                         <table class="form-table">
                             <tr>
                                 <th scope="row"><?php echo esc_html(__('有効', 'ns-media-hero-showcase')); ?></th>
@@ -239,7 +239,7 @@ class NSMHS_SettingsPage {
                             </tr>
                         </table>
 
-                        <h3><?php echo esc_html(__('最上レイヤー', 'ns-media-hero-showcase')); ?></h3>
+                        <h3><?php echo esc_html(__('UI要素', 'ns-media-hero-showcase')); ?></h3>
                         <table class="form-table">
                             <tr>
                                 <th scope="row"><?php echo esc_html(__('タイトル', 'ns-media-hero-showcase')); ?></th>
@@ -292,6 +292,48 @@ class NSMHS_SettingsPage {
                                 <th scope="row"><?php echo esc_html(__('ロゴALT', 'ns-media-hero-showcase')); ?></th>
                                 <td>
                                     <input type="text" name="layers[top][logoAlt]" id="logo-alt" value="<?php echo esc_attr($settings['layers']['top']['logoAlt']); ?>" class="regular-text" placeholder="ロゴの代替テキスト">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Layer Debug Controls -->
+                    <div class="nsmhs-section">
+                        <h2><?php echo esc_html(__('レイヤーデバッグ', 'ns-media-hero-showcase')); ?></h2>
+                        <p class="description"><?php echo esc_html(__('各レイヤーの表示/非表示を切り替えてデバッグできます。変更は即座に反映されます。', 'ns-media-hero-showcase')); ?></p>
+
+                        <table class="form-table">
+                            <tr>
+                                <th scope="row"><?php echo esc_html(__('表示レイヤー', 'ns-media-hero-showcase')); ?></th>
+                                <td>
+                                    <fieldset>
+                                        <legend class="screen-reader-text"><span><?php echo esc_html(__('表示レイヤー', 'ns-media-hero-showcase')); ?></span></legend>
+                                        <label>
+                                            <input type="checkbox" id="layer-tiles" checked>
+                                            <?php echo esc_html(__('タイル', 'ns-media-hero-showcase')); ?>
+                                            <span class="description">(Z-index: 1)</span>
+                                        </label><br>
+                                        <label>
+                                            <input type="checkbox" id="layer-zoom" checked>
+                                            <?php echo esc_html(__('ズーム', 'ns-media-hero-showcase')); ?>
+                                            <span class="description">(Z-index: 5)</span>
+                                        </label><br>
+                                        <label>
+                                            <input type="checkbox" id="layer-pattern" checked>
+                                            <?php echo esc_html(__('パターン', 'ns-media-hero-showcase')); ?>
+                                            <span class="description">(Z-index: 8)</span>
+                                        </label><br>
+                                        <label>
+                                            <input type="checkbox" id="layer-overlay" checked>
+                                            <?php echo esc_html(__('オーバーレイ', 'ns-media-hero-showcase')); ?>
+                                            <span class="description">(Z-index: 10)</span>
+                                        </label><br>
+                                        <label>
+                                            <input type="checkbox" id="layer-ui" checked>
+                                            <?php echo esc_html(__('UI要素', 'ns-media-hero-showcase')); ?>
+                                            <span class="description">(Z-index: 20)</span>
+                                        </label>
+                                    </fieldset>
                                 </td>
                             </tr>
                         </table>
@@ -361,6 +403,77 @@ class NSMHS_SettingsPage {
         <script>
         // Initialize settings data for JavaScript
         window.nsmhsSettings = <?php echo wp_json_encode($settings); ?>;
+
+        // Layer Debug Controls
+        (function() {
+            const storageKey = 'nsmhs_layer_debug';
+
+            // Load saved settings
+            function loadLayerSettings() {
+                try {
+                    const saved = localStorage.getItem(storageKey);
+                    return saved ? JSON.parse(saved) : {tiles: 1, zoom: 1, pattern: 1, overlay: 1, ui: 1};
+                } catch (e) {
+                    return {tiles: 1, zoom: 1, pattern: 1, overlay: 1, ui: 1};
+                }
+            }
+
+            // Save settings
+            function saveLayerSettings(settings) {
+                try {
+                    localStorage.setItem(storageKey, JSON.stringify(settings));
+                } catch (e) {
+                    console.warn('Could not save layer debug settings');
+                }
+            }
+
+            // Apply settings to all hero instances
+            function applyLayerSettings(settings) {
+                const heroes = document.querySelectorAll('.ns-hero, .nsmhs-hero-showcase');
+                heroes.forEach(hero => {
+                    if (hero.nsmhsInstance && hero.nsmhsInstance.setLayerFlags) {
+                        hero.nsmhsInstance.setLayerFlags(settings);
+                    }
+                });
+            }
+
+            // Initialize on DOM ready
+            document.addEventListener('DOMContentLoaded', function() {
+                const checkboxes = {
+                    tiles: document.getElementById('layer-tiles'),
+                    zoom: document.getElementById('layer-zoom'),
+                    pattern: document.getElementById('layer-pattern'),
+                    overlay: document.getElementById('layer-overlay'),
+                    ui: document.getElementById('layer-ui')
+                };
+
+                // Load and apply saved settings
+                const savedSettings = loadLayerSettings();
+                Object.keys(checkboxes).forEach(key => {
+                    if (checkboxes[key]) {
+                        checkboxes[key].checked = savedSettings[key] === 1;
+                    }
+                });
+
+                // Apply initial settings (with delay to ensure heroes are initialized)
+                setTimeout(() => applyLayerSettings(savedSettings), 500);
+
+                // Add change listeners
+                Object.keys(checkboxes).forEach(key => {
+                    if (checkboxes[key]) {
+                        checkboxes[key].addEventListener('change', function() {
+                            const currentSettings = {};
+                            Object.keys(checkboxes).forEach(k => {
+                                currentSettings[k] = checkboxes[k] && checkboxes[k].checked ? 1 : 0;
+                            });
+
+                            saveLayerSettings(currentSettings);
+                            applyLayerSettings(currentSettings);
+                        });
+                    }
+                });
+            });
+        })();
         </script>
         <?php
     }
