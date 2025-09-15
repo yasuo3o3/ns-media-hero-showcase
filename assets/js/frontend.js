@@ -237,7 +237,8 @@
             requestAnimationFrame(() => {
                 // Check if zoom-from-tile feature is enabled
                 const style = getComputedStyle(this.element);
-                const zoomFromTile = parseInt(style.getPropertyValue('--nsmhs-zoom-from-tile')) === 1;
+                const raw = (style.getPropertyValue('--nsmhs-zoom-from-tile') || '').trim();
+                const zoomFromTile = raw === '1' || raw === ''; // 空なら既定でON
 
                 // Calculate positions and scales
                 const tileRect = tile.element.getBoundingClientRect();
@@ -266,7 +267,8 @@
                     const deltaY = containerCenterY - tileCenterY;
 
                     // Calculate scale from tile size to a reasonable zoom size (not full container)
-                    const scaleFromTile = Math.min(tileRect.width / containerRect.width, tileRect.height / containerRect.height);
+                    let scaleFromTile = Math.min(tileRect.width / containerRect.width, tileRect.height / containerRect.height);
+                    scaleFromTile = Math.min(scaleFromTile, 1); // >1 にならない保険（常に“縮小”スタート）
 
                     initialTransform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleFromTile})`;
                     initialOpacity = '0';
