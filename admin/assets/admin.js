@@ -456,6 +456,7 @@
 
             // Collect layers
             data.layers.mid.enabled = $('input[name="layers[mid][enabled]"]').is(':checked');
+            data.layers.mid.middlePattern = $('select[name="layers[mid][middlePattern]"]').val();
             data.layers.mid.shadowStrength = parseFloat($('input[name="layers[mid][shadowStrength]"]').val());
             data.layers.mid.overlay = {
                 type: $('select[name="layers[mid][overlay][type]"]').val(),
