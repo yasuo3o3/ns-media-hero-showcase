@@ -40,8 +40,11 @@ class NSMHS_Render {
              aria-label="<?php echo esc_attr__('Hero showcase', 'ns-media-hero-showcase'); ?>"
              style="<?php echo esc_attr($css_vars); ?>">
 
-            <!-- Background Media Tiles -->
-            <div class="ns-hero__tiles">
+            <!-- Background Pattern Layer -->
+            <div class="nsmhs-bg-pattern"></div>
+
+            <!-- Media Tiles Container -->
+            <div class="nsmhs-tiles-container">
                 <?php $this->render_media_tiles($settings); ?>
             </div>
 
@@ -50,20 +53,21 @@ class NSMHS_Render {
                 <div class="nsmhs-zoom-content"></div>
             </div>
 
-            <?php if ($settings['layers']['mid']['enabled']): ?>
-            <!-- Middle Layer -->
-            <div class="ns-hero__mid"
+            <!-- Middle Pattern Layer -->
+            <div class="nsmhs-mid-pattern"></div>
+
+            <!-- Overlay Layer -->
+            <div class="nsmhs-overlay"
                  data-overlay-type="<?php echo esc_attr($settings['layers']['mid']['overlay']['type']); ?>"
                  data-overlay-opacity="<?php echo esc_attr($settings['layers']['mid']['overlay']['opacity']); ?>"
                  data-overlay-speed="<?php echo esc_attr($settings['layers']['mid']['overlay']['speed']); ?>"
                  data-overlay-density="<?php echo esc_attr($settings['layers']['mid']['overlay']['density']); ?>"
-                 data-overlay-blend="<?php echo esc_attr($settings['layers']['mid']['overlay']['blendMode']); ?>">
-                <div class="nsmhs-shadow-overlay"></div>
+                 data-overlay-blend="<?php echo esc_attr($settings['layers']['mid']['overlay']['blendMode']); ?>"
+                 data-shadow-strength="<?php echo esc_attr($settings['layers']['mid']['shadowStrength']); ?>">
             </div>
-            <?php endif; ?>
 
             <!-- Top Layer -->
-            <div class="ns-hero__top">
+            <div class="nsmhs-top-layer">
                 <div class="nsmhs-content-container">
                     <?php if (!empty($settings['layers']['top']['logoSrc']) || !empty($settings['layers']['top']['logoId'])): ?>
                     <div class="nsmhs-logo">

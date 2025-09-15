@@ -363,83 +363,88 @@
         }
 
         async initializeOverlay() {
-            const midLayer = this.element.querySelector('.ns-hero__mid');
-            if (!midLayer) return;
+            const overlayLayer = this.element.querySelector('.nsmhs-overlay');
+            if (!overlayLayer) return;
 
-            // Apply overlay settings
-            this.applyOverlaySettings(midLayer);
+            // Apply all layer settings
+            this.applyLayerSettings();
 
-            const overlayType = midLayer.dataset.overlayType;
+            const overlayType = overlayLayer.dataset.overlayType;
             if (!overlayType || overlayType === 'none') return;
 
-            // Handle CSS-based overlays
-            if (['animated-gradient', 'dots', 'tiles'].includes(overlayType)) {
-                return;
-            }
+            // Handle canvas-based overlays only
+            if (['constellation', 'morph-polygons', 'soft-waves'].includes(overlayType)) {
+                try {
+                    // Dynamic import of overlay module
+                    this.overlayModule = await import(`./overlays/${overlayType}.js`);
 
-            try {
-                // Dynamic import of overlay module
-                this.overlayModule = await import(`./overlays/${overlayType}.js`);
+                    // Create canvas element
+                    const canvas = document.createElement('canvas');
+                    overlayLayer.appendChild(canvas);
 
-                // Create canvas element
-                const canvas = document.createElement('canvas');
-                midLayer.appendChild(canvas);
+                    // Extract settings from data attributes
+                    const overlaySettings = {
+                        opacity: parseFloat(overlayLayer.dataset.overlayOpacity) || 0.25,
+                        speed: parseFloat(overlayLayer.dataset.overlaySpeed) || 1,
+                        density: overlayLayer.dataset.overlayDensity || 'medium',
+                        blendMode: overlayLayer.dataset.overlayBlend || 'normal'
+                    };
 
-                // Extract settings from data attributes
-                const overlaySettings = {
-                    opacity: parseFloat(midLayer.dataset.overlayOpacity) || 0.25,
-                    speed: parseFloat(midLayer.dataset.overlaySpeed) || 1,
-                    density: midLayer.dataset.overlayDensity || 'medium',
-                    blendMode: midLayer.dataset.overlayBlend || 'normal'
-                };
+                    // Environment settings
+                    const env = {
+                        reducedMotion: this.prefersReducedMotion,
+                        pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+                        capFps: true,
+                        width: canvas.offsetWidth,
+                        height: canvas.offsetHeight
+                    };
 
-                // Environment settings
-                const env = {
-                    reducedMotion: this.prefersReducedMotion,
-                    pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
-                    capFps: true,
-                    width: canvas.offsetWidth,
-                    height: canvas.offsetHeight
-                };
+                    // Initialize overlay
+                    this.overlayInstance = this.overlayModule.init(canvas, overlaySettings, env);
 
-                // Initialize overlay
-                this.overlayInstance = this.overlayModule.init(canvas, overlaySettings, env);
+                    // Start if visible and not reduced motion
+                    if (this.isVisible && !this.prefersReducedMotion) {
+                        this.overlayInstance.start();
+                    }
 
-                // Start if visible and not reduced motion
-                if (this.isVisible && !this.prefersReducedMotion) {
-                    this.overlayInstance.start();
+                    // Setup resize handling
+                    window.addEventListener('resize', this.handleOverlayResize.bind(this));
+
+                } catch (error) {
+                    console.warn(`Failed to load overlay module ${overlayType}:`, error);
                 }
-
-                // Setup resize handling
-                window.addEventListener('resize', this.handleOverlayResize.bind(this));
-
-            } catch (error) {
-                console.warn(`Failed to load overlay module ${overlayType}:`, error);
             }
         }
 
-        applyOverlaySettings(midLayer) {
-            const shadowStrength = Math.max(0, Math.min(1, parseFloat(midLayer.dataset.shadowStrength) || 0.6));
-            const overlayType = midLayer.dataset.overlayType || 'constellation';
+        applyLayerSettings() {
+            const overlayLayer = this.element.querySelector('.nsmhs-overlay');
+            if (!overlayLayer) return;
 
-            // Set CSS variable for overlay alpha
-            document.documentElement.style.setProperty('--nsmhs-overlay-alpha', shadowStrength);
+            // Get settings from data attributes
+            const shadowStrength = Math.max(0, Math.min(1, parseFloat(overlayLayer.dataset.shadowStrength) || 0.6));
 
-            // Find or create overlay element
-            let overlay = midLayer.querySelector('.nsmhs-overlay');
-            if (!overlay && ['animated-gradient', 'dots', 'tiles'].includes(overlayType)) {
-                overlay = document.createElement('div');
-                overlay.className = 'nsmhs-overlay';
-                midLayer.appendChild(overlay);
+            // Set CSS variables for layer alpha values
+            document.documentElement.style.setProperty('--nsmhs-mid-alpha', shadowStrength);
+
+            // Apply pattern classes (fallback for now - can be extended with actual settings)
+            const backgroundPattern = 'none'; // TODO: Get from settings
+            const middlePattern = 'none';     // TODO: Get from settings
+
+            // Apply background pattern
+            const bgLayer = this.element.querySelector('.nsmhs-bg-pattern');
+            if (bgLayer) {
+                bgLayer.className = 'nsmhs-bg-pattern';
+                if (backgroundPattern !== 'none') {
+                    bgLayer.classList.add(`nsmhs-bg-pattern--${backgroundPattern}`);
+                }
             }
 
-            if (overlay) {
-                // Reset existing overlay classes
-                overlay.className = 'nsmhs-overlay';
-
-                // Apply specific overlay type class
-                if (['animated-gradient', 'dots', 'tiles'].includes(overlayType)) {
-                    overlay.classList.add(`nsmhs-overlay--${overlayType}`);
+            // Apply middle pattern
+            const midLayer = this.element.querySelector('.nsmhs-mid-pattern');
+            if (midLayer) {
+                midLayer.className = 'nsmhs-mid-pattern';
+                if (middlePattern !== 'none') {
+                    midLayer.classList.add(`nsmhs-mid-pattern--${middlePattern}`);
                 }
             }
         }
