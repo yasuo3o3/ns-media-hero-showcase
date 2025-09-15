@@ -165,18 +165,7 @@ class NSMHS_SettingsPage {
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php echo esc_html(__('背景パターン', 'ns-media-hero-showcase')); ?></th>
-                                <td>
-                                    <select name="layers[mid][backgroundPattern]">
-                                        <option value="none" <?php selected($settings['layers']['mid']['backgroundPattern'], 'none'); ?>>なし</option>
-                                        <option value="animated-gradient" <?php selected($settings['layers']['mid']['backgroundPattern'], 'animated-gradient'); ?>>動くグラデーション</option>
-                                        <option value="dots" <?php selected($settings['layers']['mid']['backgroundPattern'], 'dots'); ?>>ドット</option>
-                                        <option value="tiles" <?php selected($settings['layers']['mid']['backgroundPattern'], 'tiles'); ?>>タイル</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th scope="row"><?php echo esc_html(__('中間パターン', 'ns-media-hero-showcase')); ?></th>
+                                <th scope="row"><?php echo esc_html(__('パターン', 'ns-media-hero-showcase')); ?></th>
                                 <td>
                                     <select name="layers[mid][middlePattern]">
                                         <option value="none" <?php selected($settings['layers']['mid']['middlePattern'], 'none'); ?>>なし</option>

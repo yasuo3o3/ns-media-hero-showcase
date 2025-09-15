@@ -40,9 +40,6 @@ class NSMHS_Render {
              aria-label="<?php echo esc_attr__('Hero showcase', 'ns-media-hero-showcase'); ?>"
              style="<?php echo esc_attr($css_vars); ?>">
 
-            <!-- Background Pattern Layer -->
-            <div class="nsmhs-bg-pattern"></div>
-
             <!-- Media Tiles Container -->
             <div class="nsmhs-tiles-container">
                 <?php $this->render_media_tiles($settings); ?>
@@ -64,7 +61,6 @@ class NSMHS_Render {
                  data-overlay-density="<?php echo esc_attr($settings['layers']['mid']['overlay']['density']); ?>"
                  data-overlay-blend="<?php echo esc_attr($settings['layers']['mid']['overlay']['blendMode']); ?>"
                  data-shadow-strength="<?php echo esc_attr($settings['layers']['mid']['shadowStrength']); ?>"
-                 data-background-pattern="<?php echo esc_attr($settings['layers']['mid']['backgroundPattern']); ?>"
                  data-middle-pattern="<?php echo esc_attr($settings['layers']['mid']['middlePattern']); ?>">
             </div>
 

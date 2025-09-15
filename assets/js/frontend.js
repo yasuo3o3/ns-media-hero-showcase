@@ -427,17 +427,7 @@
             document.documentElement.style.setProperty('--nsmhs-mid-alpha', shadowStrength);
 
             // Get pattern settings from data attributes
-            const backgroundPattern = overlayLayer.dataset.backgroundPattern || 'none';
             const middlePattern = overlayLayer.dataset.middlePattern || 'none';
-
-            // Apply background pattern
-            const bgLayer = this.element.querySelector('.nsmhs-bg-pattern');
-            if (bgLayer) {
-                bgLayer.className = 'nsmhs-bg-pattern';
-                if (backgroundPattern !== 'none') {
-                    bgLayer.classList.add(`nsmhs-bg-pattern--${backgroundPattern}`);
-                }
-            }
 
             // Apply middle pattern
             const midLayer = this.element.querySelector('.nsmhs-mid-pattern');

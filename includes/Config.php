@@ -47,7 +47,6 @@ class NSMHS_Config {
             'layers' => [
                 'mid' => [
                     'enabled' => true,
-                    'backgroundPattern' => 'none',
                     'middlePattern' => 'none',
                     'shadowStrength' => 0.25,
                     'overlay' => [
@@ -141,7 +140,6 @@ class NSMHS_Config {
         $validated['layers'] = [
             'mid' => [
                 'enabled' => !empty($input['layers']['mid']['enabled']),
-                'backgroundPattern' => in_array($input['layers']['mid']['backgroundPattern'] ?? 'none', ['none', 'animated-gradient', 'dots', 'tiles']) ? $input['layers']['mid']['backgroundPattern'] : 'none',
                 'middlePattern' => in_array($input['layers']['mid']['middlePattern'] ?? 'none', ['none', 'animated-gradient', 'dots', 'tiles']) ? $input['layers']['mid']['middlePattern'] : 'none',
                 'shadowStrength' => max(0, min(1, floatval($input['layers']['mid']['shadowStrength'] ?? 0.25))),
                 'overlay' => $this->validate_overlay_settings($input['layers']['mid']['overlay'] ?? [])

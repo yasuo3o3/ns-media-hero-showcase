@@ -18,7 +18,6 @@
   --nsmhs-dot-size: 5px;
   --nsmhs-tile-size: 14px;
   --nsmhs-grad-speed: 30s;
-  --nsmhs-bg-alpha: 0.35;
   --nsmhs-mid-alpha: 0.6;
 }
 
@@ -33,7 +32,6 @@
 }
 
 /* Layer Base Styles */
-.nsmhs-bg-pattern,
 .nsmhs-mid-pattern,
 .nsmhs-overlay,
 .nsmhs-zoom-container,
@@ -42,11 +40,6 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-}
-
-/* Background Pattern Layer */
-.nsmhs-bg-pattern {
-  z-index: 0;
 }
 
 /* Media Tiles Container */
@@ -193,28 +186,7 @@
 }
 
 
-/* Background Pattern Styles */
-.nsmhs-bg-pattern--animated-gradient {
-  background: linear-gradient(135deg, rgba(0,0,0,calc(var(--nsmhs-bg-alpha)*0.2)) 0%, rgba(0,0,0,var(--nsmhs-bg-alpha)) 50%, rgba(0,0,0,calc(var(--nsmhs-bg-alpha)*0.2)) 100%);
-  background-size: 200% 200%;
-  animation: nsmhs-grad-move var(--nsmhs-grad-speed) linear infinite;
-}
-
-.nsmhs-bg-pattern--dots {
-  background-color: rgba(0,0,0,calc(var(--nsmhs-bg-alpha)*0.4));
-  background-image: radial-gradient(rgba(0,0,0,var(--nsmhs-bg-alpha)) 35%, rgba(0,0,0,0) 36%);
-  background-size: var(--nsmhs-dot-size) var(--nsmhs-dot-size);
-}
-
-.nsmhs-bg-pattern--tiles {
-  background-color: rgba(0,0,0,calc(var(--nsmhs-bg-alpha)*0.25));
-  background-image:
-    linear-gradient(rgba(0,0,0,var(--nsmhs-bg-alpha)) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,var(--nsmhs-bg-alpha)) 1px, transparent 1px);
-  background-size: var(--nsmhs-tile-size) var(--nsmhs-tile-size);
-}
-
-/* Middle Pattern Styles */
+/* Pattern Styles */
 .nsmhs-mid-pattern--animated-gradient {
   background: linear-gradient(135deg, rgba(0,0,0,calc(var(--nsmhs-mid-alpha)*0.2)) 0%, rgba(0,0,0,var(--nsmhs-mid-alpha)) 50%, rgba(0,0,0,calc(var(--nsmhs-mid-alpha)*0.2)) 100%);
   background-size: 200% 200%;
@@ -242,7 +214,6 @@
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-  .nsmhs-bg-pattern--animated-gradient,
   .nsmhs-mid-pattern--animated-gradient {
     animation: none;
   }
