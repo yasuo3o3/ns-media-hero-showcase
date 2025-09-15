@@ -14,19 +14,20 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
     let currentDensity = density;
     let currentPixelRatio = env.pixelRatio;
 
-    // 密度に応じた粒子数
+    // 密度に応じた粒子数（見やすさ重視で調整）
     const particleCounts = {
-        low: 40,
-        medium: 80,
-        high: 140
+        low: 50,
+        medium: 60,
+        high: 70
     };
 
     // 粒子クラス
     class Particle {
         constructor() {
             this.reset();
-            this.vx = (Math.random() - 0.5) * 0.5 * speed;
-            this.vy = (Math.random() - 0.5) * 0.5 * speed;
+            this.vx = (Math.random() - 0.5) * (0.3 + Math.random() * 0.2) * speed;
+            this.vy = (Math.random() - 0.5) * (0.3 + Math.random() * 0.2) * speed;
+            this.size = 2 + Math.random() * 2; // 2~4px
         }
 
         reset() {
@@ -47,8 +48,8 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
 
         draw() {
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 1 * currentPixelRatio, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.8})`;
+            ctx.arc(this.x, this.y, this.size * currentPixelRatio, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, 0.8)`;
             ctx.fill();
         }
     }
@@ -62,7 +63,7 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
     }
 
     function drawConnections() {
-        const maxDistance = 120 * currentPixelRatio;
+        const maxDistance = 135; // 見やすさ重視で120~150pxの中間値
         const maxDistanceSquared = maxDistance * maxDistance;
 
         for (let i = 0; i < particles.length; i++) {
@@ -73,13 +74,13 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
 
                 if (distanceSquared < maxDistanceSquared) {
                     const distance = Math.sqrt(distanceSquared);
-                    const alpha = (1 - distance / maxDistance) * opacity * 0.3;
+                    const alpha = (1 - distance / maxDistance) * 0.3; // 強化した線の透明度
 
                     ctx.beginPath();
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
                     ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-                    ctx.lineWidth = 0.5 * currentPixelRatio;
+                    ctx.lineWidth = 0.75 * currentPixelRatio; // 0.5~1pxの中間値
                     ctx.stroke();
                 }
             }
@@ -93,9 +94,10 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
         const deltaTime = currentTime - lastTime;
         lastTime = currentTime;
 
-        // リサイズチェック
-        if (canvas.width !== canvas.offsetWidth * currentPixelRatio ||
-            canvas.height !== canvas.offsetHeight * currentPixelRatio) {
+        // リサイズチェック（パフォーマンス重視でrequestAnimationFrameで対応）
+        const rect = canvas.getBoundingClientRect();
+        if (canvas.width !== rect.width * currentPixelRatio ||
+            canvas.height !== rect.height * currentPixelRatio) {
             resize();
         }
 
@@ -148,12 +150,21 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
     }
 
     function resize() {
+        // ウィンドウの実際のサイズを取得
         const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * currentPixelRatio;
-        canvas.height = rect.height * currentPixelRatio;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = rect.height + 'px';
-        ctx.scale(currentPixelRatio, currentPixelRatio);
+        const newWidth = rect.width;
+        const newHeight = rect.height;
+
+        // Canvasの実際の描画サイズを設定
+        canvas.width = newWidth * currentPixelRatio;
+        canvas.height = newHeight * currentPixelRatio;
+
+        // CSSサイズを設定（表示サイズ）
+        canvas.style.width = newWidth + 'px';
+        canvas.style.height = newHeight + 'px';
+
+        // コンテキストのスケールを設定
+        ctx.setTransform(currentPixelRatio, 0, 0, currentPixelRatio, 0, 0);
 
         // パーティクル位置をリセット
         particles.forEach(particle => particle.reset());

@@ -17,8 +17,8 @@ export function init(canvas, { opacity, speed, density, blendMode }, env) {
     // 密度に応じた波の数
     const waveCounts = {
         low: 2,
-        medium: 3,
-        high: 4
+        medium: 4,
+        high: 8
     };
 
     // 波クラス
