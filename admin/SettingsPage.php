@@ -494,6 +494,148 @@ class NSMHS_SettingsPage {
                     }
                 });
             });
+
+            // Debug functions for troubleshooting
+            window.debugLayerControls = function() {
+                console.group('=== Layer Debug Controls Diagnosis ===');
+
+                // 1. Hero要素の存在確認
+                const heroes = document.querySelectorAll('.ns-hero, .nsmhs-hero-showcase');
+                console.log(`Found ${heroes.length} hero elements:`, heroes);
+
+                if (heroes.length === 0) {
+                    console.warn('⚠️ No hero elements found! Layer debug controls will not work.');
+                    console.log('Expected elements: .ns-hero or .nsmhs-hero-showcase');
+                    console.groupEnd();
+                    return;
+                }
+
+                // 2. 各Hero要素の詳細確認
+                heroes.forEach((hero, index) => {
+                    console.group(`Hero ${index + 1}:`);
+
+                    // 基本情報
+                    console.log('Element:', hero);
+                    console.log('Classes:', hero.className);
+                    console.log('ID:', hero.id || 'No ID');
+
+                    // data属性確認
+                    const layerAttrs = {
+                        tiles: hero.getAttribute('data-layer-tiles'),
+                        zoom: hero.getAttribute('data-layer-zoom'),
+                        pattern: hero.getAttribute('data-layer-pattern'),
+                        overlay: hero.getAttribute('data-layer-overlay'),
+                        ui: hero.getAttribute('data-layer-ui')
+                    };
+                    console.log('Layer attributes:', layerAttrs);
+
+                    // インスタンス確認
+                    const hasInstance = !!hero.nsmhsInstance;
+                    console.log('Has JS instance:', hasInstance);
+                    if (hasInstance) {
+                        if (typeof hero.nsmhsInstance.setLayerFlags === 'function') {
+                            console.log('✅ setLayerFlags method exists');
+                            if (typeof hero.nsmhsInstance.getLayerFlags === 'function') {
+                                console.log('Current flags:', hero.nsmhsInstance.getLayerFlags());
+                            }
+                        } else {
+                            console.warn('❌ setLayerFlags method not found');
+                        }
+                    } else {
+                        console.warn('❌ JS instance not initialized');
+                    }
+
+                    // 子要素確認
+                    const layers = {
+                        tiles: hero.querySelector('.nsmhs-tiles-container'),
+                        zoom: hero.querySelector('.nsmhs-zoom-container'),
+                        pattern: hero.querySelector('.nsmhs-mid-pattern'),
+                        overlay: hero.querySelector('.nsmhs-overlay'),
+                        ui: hero.querySelector('.nsmhs-top-layer')
+                    };
+                    console.log('Layer elements found:', Object.keys(layers).filter(k => layers[k]));
+                    console.log('Layer elements missing:', Object.keys(layers).filter(k => !layers[k]));
+
+                    console.groupEnd();
+                });
+
+                // 3. チェックボックス確認
+                console.group('Checkboxes:');
+                const checkboxes = {
+                    tiles: document.getElementById('layer-tiles'),
+                    zoom: document.getElementById('layer-zoom'),
+                    pattern: document.getElementById('layer-pattern'),
+                    overlay: document.getElementById('layer-overlay'),
+                    ui: document.getElementById('layer-ui')
+                };
+
+                Object.keys(checkboxes).forEach(key => {
+                    const checkbox = checkboxes[key];
+                    if (checkbox) {
+                        console.log(`${key}: ${checkbox.checked ? 'checked' : 'unchecked'}`);
+                    } else {
+                        console.warn(`${key}: not found`);
+                    }
+                });
+                console.groupEnd();
+
+                // 4. LocalStorage確認
+                console.group('LocalStorage:');
+                try {
+                    const stored = localStorage.getItem('nsmhs_layer_debug');
+                    console.log('Stored data:', stored);
+                    if (stored) {
+                        console.log('Parsed data:', JSON.parse(stored));
+                    }
+                } catch (e) {
+                    console.warn('LocalStorage error:', e);
+                }
+                console.groupEnd();
+
+                console.groupEnd();
+            };
+
+            window.testLayerToggle = function(layer, value) {
+                console.log(`Testing ${layer} = ${value}`);
+
+                const heroes = document.querySelectorAll('.ns-hero, .nsmhs-hero-showcase');
+                if (heroes.length === 0) {
+                    console.warn('No hero elements found');
+                    return;
+                }
+
+                heroes.forEach(hero => {
+                    hero.setAttribute(`data-layer-${layer}`, String(value));
+
+                    const elementMap = {
+                        tiles: '.nsmhs-tiles-container',
+                        zoom: '.nsmhs-zoom-container',
+                        pattern: '.nsmhs-mid-pattern',
+                        overlay: '.nsmhs-overlay',
+                        ui: '.nsmhs-top-layer'
+                    };
+
+                    const element = hero.querySelector(elementMap[layer]);
+                    if (element) {
+                        const isVisible = getComputedStyle(element).display !== 'none';
+                        console.log(`${layer} layer: ${isVisible ? 'visible' : 'hidden'}`);
+                    } else {
+                        console.warn(`${layer} element not found`);
+                    }
+                });
+            };
+
+            window.forceApplyLayerSettings = function(settings) {
+                console.log('Force applying layer settings:', settings);
+                applyLayerSettings(settings || {tiles: 0, zoom: 1, pattern: 1, overlay: 1, ui: 1});
+            };
+
+            console.log('=== NSMHS Layer Debug Tools Loaded ===');
+            console.log('Available commands:');
+            console.log('- debugLayerControls() : Complete diagnosis');
+            console.log('- testLayerToggle("tiles", 0) : Test specific layer');
+            console.log('- forceApplyLayerSettings({tiles: 0, zoom: 1, pattern: 1, overlay: 1, ui: 1}) : Force apply settings');
+
         })();
         </script>
         <?php
