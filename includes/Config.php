@@ -112,7 +112,7 @@ class NSMHS_Config {
         }
 
         // Validate grids
-        $allowed_grids = ['3x2', '3x4', '4x2', '5x3', '5x4'];
+        $allowed_grids = ['3x2', '3x4', '3x5', '4x2', '4x3', '4x5', '5x3', '5x4'];
         $validated['grids'] = [
             'pc' => in_array($input['grids']['pc'] ?? '', $allowed_grids) ? $input['grids']['pc'] : '5x3',
             'tablet' => in_array($input['grids']['tablet'] ?? '', $allowed_grids) ? $input['grids']['tablet'] : '4x2',
