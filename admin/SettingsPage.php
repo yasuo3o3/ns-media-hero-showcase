@@ -430,9 +430,25 @@ class NSMHS_SettingsPage {
             // Apply settings to all hero instances
             function applyLayerSettings(settings) {
                 const heroes = document.querySelectorAll('.ns-hero, .nsmhs-hero-showcase');
+
+                if (heroes.length === 0) {
+                    console.warn('NSMHS Layer Debug: No hero elements found');
+                    return;
+                }
+
                 heroes.forEach(hero => {
+                    // Always set data attributes for CSS control
+                    hero.setAttribute('data-layer-tiles', String(settings.tiles || 1));
+                    hero.setAttribute('data-layer-zoom', String(settings.zoom || 1));
+                    hero.setAttribute('data-layer-pattern', String(settings.pattern || 1));
+                    hero.setAttribute('data-layer-overlay', String(settings.overlay || 1));
+                    hero.setAttribute('data-layer-ui', String(settings.ui || 1));
+
+                    // If JS instance exists, also call the method
                     if (hero.nsmhsInstance && hero.nsmhsInstance.setLayerFlags) {
                         hero.nsmhsInstance.setLayerFlags(settings);
+                    } else {
+                        console.log('NSMHS Layer Debug: JS instance not found, using CSS-only control');
                     }
                 });
             }
@@ -456,7 +472,10 @@ class NSMHS_SettingsPage {
                 });
 
                 // Apply initial settings (with delay to ensure heroes are initialized)
+                // Try multiple times with increasing delays
                 setTimeout(() => applyLayerSettings(savedSettings), 500);
+                setTimeout(() => applyLayerSettings(savedSettings), 1500);
+                setTimeout(() => applyLayerSettings(savedSettings), 3000);
 
                 // Add change listeners
                 Object.keys(checkboxes).forEach(key => {
@@ -466,6 +485,8 @@ class NSMHS_SettingsPage {
                             Object.keys(checkboxes).forEach(k => {
                                 currentSettings[k] = checkboxes[k] && checkboxes[k].checked ? 1 : 0;
                             });
+
+                            console.log('NSMHS Layer Debug: Checkbox changed', key, 'New settings:', currentSettings);
 
                             saveLayerSettings(currentSettings);
                             applyLayerSettings(currentSettings);
