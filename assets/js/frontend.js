@@ -366,8 +366,16 @@
             const midLayer = this.element.querySelector('.ns-hero__mid');
             if (!midLayer) return;
 
+            // Apply overlay settings
+            this.applyOverlaySettings(midLayer);
+
             const overlayType = midLayer.dataset.overlayType;
             if (!overlayType || overlayType === 'none') return;
+
+            // Handle CSS-based overlays
+            if (['animated-gradient', 'dots', 'tiles'].includes(overlayType)) {
+                return;
+            }
 
             try {
                 // Dynamic import of overlay module
@@ -407,6 +415,32 @@
 
             } catch (error) {
                 console.warn(`Failed to load overlay module ${overlayType}:`, error);
+            }
+        }
+
+        applyOverlaySettings(midLayer) {
+            const shadowStrength = Math.max(0, Math.min(1, parseFloat(midLayer.dataset.shadowStrength) || 0.6));
+            const overlayType = midLayer.dataset.overlayType || 'constellation';
+
+            // Set CSS variable for overlay alpha
+            document.documentElement.style.setProperty('--nsmhs-overlay-alpha', shadowStrength);
+
+            // Find or create overlay element
+            let overlay = midLayer.querySelector('.nsmhs-overlay');
+            if (!overlay && ['animated-gradient', 'dots', 'tiles'].includes(overlayType)) {
+                overlay = document.createElement('div');
+                overlay.className = 'nsmhs-overlay';
+                midLayer.appendChild(overlay);
+            }
+
+            if (overlay) {
+                // Reset existing overlay classes
+                overlay.className = 'nsmhs-overlay';
+
+                // Apply specific overlay type class
+                if (['animated-gradient', 'dots', 'tiles'].includes(overlayType)) {
+                    overlay.classList.add(`nsmhs-overlay--${overlayType}`);
+                }
             }
         }
 

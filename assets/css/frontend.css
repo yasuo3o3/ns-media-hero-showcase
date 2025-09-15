@@ -14,6 +14,10 @@
   --nsmhs-tablet-rows: 2;
   --nsmhs-phone-cols: 3;
   --nsmhs-phone-rows: 2;
+  --nsmhs-overlay-alpha: 0.6;
+  --nsmhs-dot-size: 5px;
+  --nsmhs-tile-size: 14px;
+  --nsmhs-grad-speed: 30s;
 }
 
 /* Hero Showcase Container */
@@ -162,6 +166,50 @@
   object-fit: cover;
   object-position: center;
   opacity: 0.3;
+}
+
+/* Overlay Base */
+.nsmhs-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  background-blend-mode: multiply;
+}
+
+/* Animated Gradient Overlay */
+.nsmhs-overlay--animated-gradient {
+  background: linear-gradient(135deg, rgba(0,0,0,calc(var(--nsmhs-overlay-alpha)*0.2)) 0%, rgba(0,0,0,var(--nsmhs-overlay-alpha)) 50%, rgba(0,0,0,calc(var(--nsmhs-overlay-alpha)*0.2)) 100%);
+  background-size: 200% 200%;
+  animation: nsmhs-grad-move var(--nsmhs-grad-speed) linear infinite;
+}
+
+@keyframes nsmhs-grad-move {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 200%; }
+}
+
+/* Dots Overlay */
+.nsmhs-overlay--dots {
+  background-color: rgba(0,0,0,calc(var(--nsmhs-overlay-alpha)*0.4));
+  background-image: radial-gradient(rgba(0,0,0,var(--nsmhs-overlay-alpha)) 35%, rgba(0,0,0,0) 36%);
+  background-size: var(--nsmhs-dot-size) var(--nsmhs-dot-size);
+}
+
+/* Tiles Overlay */
+.nsmhs-overlay--tiles {
+  background-color: rgba(0,0,0,calc(var(--nsmhs-overlay-alpha)*0.25));
+  background-image:
+    linear-gradient(rgba(0,0,0,var(--nsmhs-overlay-alpha)) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,var(--nsmhs-overlay-alpha)) 1px, transparent 1px);
+  background-size: var(--nsmhs-tile-size) var(--nsmhs-tile-size);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .nsmhs-overlay--animated-gradient {
+    animation: none;
+  }
 }
 
 /* Top Layer */
