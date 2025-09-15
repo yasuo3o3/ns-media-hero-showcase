@@ -63,7 +63,9 @@ class NSMHS_Render {
                  data-overlay-speed="<?php echo esc_attr($settings['layers']['mid']['overlay']['speed']); ?>"
                  data-overlay-density="<?php echo esc_attr($settings['layers']['mid']['overlay']['density']); ?>"
                  data-overlay-blend="<?php echo esc_attr($settings['layers']['mid']['overlay']['blendMode']); ?>"
-                 data-shadow-strength="<?php echo esc_attr($settings['layers']['mid']['shadowStrength']); ?>">
+                 data-shadow-strength="<?php echo esc_attr($settings['layers']['mid']['shadowStrength']); ?>"
+                 data-background-pattern="<?php echo esc_attr($settings['layers']['mid']['backgroundPattern']); ?>"
+                 data-middle-pattern="<?php echo esc_attr($settings['layers']['mid']['middlePattern']); ?>">
             </div>
 
             <!-- Top Layer -->

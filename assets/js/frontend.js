@@ -426,9 +426,9 @@
             // Set CSS variables for layer alpha values
             document.documentElement.style.setProperty('--nsmhs-mid-alpha', shadowStrength);
 
-            // Apply pattern classes (fallback for now - can be extended with actual settings)
-            const backgroundPattern = 'none'; // TODO: Get from settings
-            const middlePattern = 'none';     // TODO: Get from settings
+            // Get pattern settings from data attributes
+            const backgroundPattern = overlayLayer.dataset.backgroundPattern || 'none';
+            const middlePattern = overlayLayer.dataset.middlePattern || 'none';
 
             // Apply background pattern
             const bgLayer = this.element.querySelector('.nsmhs-bg-pattern');
