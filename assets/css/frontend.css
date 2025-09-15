@@ -81,6 +81,7 @@
   position: relative;
   overflow: hidden;
   background: #222;
+  height: 100%;
 }
 
 .nsmhs-tile.nsmhs-tile-hidden {
@@ -90,7 +91,7 @@
 .nsmhs-media-element,
 .nsmhs-poster-fallback {
   width: 100%;
-  aspect-ratio: 16/9;
+  height: 100%;
   object-fit: cover;
   object-position: center;
   transition: none;
