@@ -239,24 +239,21 @@
 
             const scale = Math.max(containerRect.width / tileRect.width, containerRect.height / tileRect.height);
 
-            // Center coordinates
-            const tileCenterX = tileRect.left + tileRect.width / 2;
-            const tileCenterY = tileRect.top + tileRect.height / 2;
-            const containerCenterX = containerRect.left + containerRect.width / 2;
-            const containerCenterY = containerRect.top + containerRect.height / 2;
+            // Center coordinates (container-relative)
+            const tileCenterX = tileRect.left - containerRect.left + tileRect.width / 2;
+            const tileCenterY = tileRect.top - containerRect.top + tileRect.height / 2;
+            const containerCenterX = containerRect.width / 2;
+            const containerCenterY = containerRect.height / 2;
 
-            const translateX = (containerRect.width / 2) - (tileCenterX - containerRect.left);
-            const translateY = (containerRect.height / 2) - (tileCenterY - containerRect.top);
+            const translateX = containerCenterX - tileCenterX;
+            const translateY = containerCenterY - tileCenterY;
 
-            // Set transform-origin and dimensions
-            this.zoomContent.style.transformOrigin = 'center center';
+            // Set dimensions
             this.zoomContent.style.width = `${containerRect.width}px`;
             this.zoomContent.style.height = `${containerRect.height}px`;
 
-            // Initial transform: tile center position with inverse scale
-            const initialTranslateX = tileCenterX - containerCenterX;
-            const initialTranslateY = tileCenterY - containerCenterY;
-            this.zoomContent.style.transform = `translate(${initialTranslateX}px, ${initialTranslateY}px) scale(${1/scale})`;
+            // Initial transform: tile position
+            this.zoomContent.style.transform = `translate(${tileRect.left - containerRect.left}px, ${tileRect.top - containerRect.top}px) scale(${1/scale})`;
 
             // Show zoom content
             this.zoomContent.classList.add('nsmhs-active');
@@ -271,7 +268,7 @@
                 const duration = this.prefersReducedMotion ? 300 : this.settings.timing.zoomInDuration;
 
                 this.zoomContent.style.transition = `transform ${duration}ms var(--nsmhs-easing)`;
-                this.zoomContent.style.transform = `translate(0px, 0px) scale(1)`;
+                this.zoomContent.style.transform = `translate(${translateX}px, ${translateY}px) scale(1)`;
 
                 // Start video after animation begins
                 this.startMediaPlayback(mediaClone);
