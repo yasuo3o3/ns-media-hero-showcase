@@ -26,9 +26,30 @@
 .nsmhs-hero-showcase {
   position: relative;
   width: 100%;
-  aspect-ratio: 16/9;
   overflow: hidden;
   background: #000;
+}
+
+/* Dynamic aspect-ratio based on grid configuration */
+@media (min-width: 1024px) {
+  .ns-hero,
+  .nsmhs-hero-showcase {
+    aspect-ratio: var(--nsmhs-pc-aspect-ratio, 16/9);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ns-hero,
+  .nsmhs-hero-showcase {
+    aspect-ratio: var(--nsmhs-tablet-aspect-ratio, 16/9);
+  }
+}
+
+@media (max-width: 767px) {
+  .ns-hero,
+  .nsmhs-hero-showcase {
+    aspect-ratio: var(--nsmhs-phone-aspect-ratio, 16/9);
+  }
 }
 
 /* Layer Base Styles */
@@ -59,11 +80,14 @@
 /* Middle Pattern Layer */
 .nsmhs-mid-pattern {
   z-index: 8;
+  pointer-events: none;
+  /* ensure it actually paints even if no pattern class (none) */
+  background-clip: padding-box;
 }
 
 /* Overlay Layer */
 .nsmhs-overlay {
-  z-index: 10;
+  z-index: 10; /* overlay above mid-pattern */
 }
 
 /* Top Layer */
@@ -319,9 +343,12 @@
   z-index: 10;
 }
 
-.ns-hero__mid canvas {
+.nsmhs-overlay canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
+  display: block;
   mix-blend-mode: var(--overlay-blend, normal);
   opacity: var(--overlay-opacity, 1);
 }
