@@ -197,3 +197,14 @@ cache/
 *.css.map
 *.sass.map
 *.scss.map
+
+# Claude Code specific
+.claude/
+.history/
+CLAUDE.md
+REVIEW.md
+NETSERVICE.md
+WORDPRESS.md
+LICENSE
+
+/build/
