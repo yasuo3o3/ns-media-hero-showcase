@@ -20,8 +20,9 @@
 .ns-hero,
 .nsmhs-hero-showcase {
   position: relative;
-  width: 100%;
-  height: 100vh;
+  width: 50vh;
+  /* height: 100vh; */
+  height: auto;
   overflow: hidden;
   background: #000;
 }
@@ -219,7 +220,8 @@
   font-size: 1.1rem;
   font-weight: 600;
   transition: all 0.3s ease;
-  pointer-events: auto;
+  pointer-events: auto;  
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
