@@ -68,6 +68,17 @@
             $(document).on('input', 'input[type="range"]', (e) => {
                 this.updateRangeValue($(e.target));
             });
+
+            // Logo selection handlers
+            $('#select-logo').on('click', (e) => {
+                e.preventDefault();
+                this.openLogoPicker();
+            });
+
+            $('#clear-logo').on('click', (e) => {
+                e.preventDefault();
+                this.clearLogo();
+            });
         }
 
         openMediaPicker($item, purpose) {
@@ -184,6 +195,53 @@
             // Hide poster preview and clear button
             $item.find('.nsmhs-poster-preview').hide();
             $item.find('.nsmhs-clear-poster').hide();
+        }
+
+        openLogoPicker() {
+            const mediaFrame = wp.media({
+                title: 'ロゴを選択',
+                library: {
+                    type: ['image']
+                },
+                multiple: false,
+                button: {
+                    text: '選択'
+                }
+            });
+
+            // When logo is selected
+            mediaFrame.on('select', () => {
+                const attachment = mediaFrame.state().get('selection').first().toJSON();
+                this.setLogo(attachment);
+            });
+
+            mediaFrame.open();
+        }
+
+        setLogo(attachment) {
+            // Update form fields
+            $('#logo-id').val(attachment.id);
+            $('#logo-src').val(attachment.url);
+            $('#logo-alt').val(attachment.alt || attachment.title || '');
+
+            // Update preview
+            const $preview = $('#logo-preview');
+            $preview.find('img').attr('src', attachment.url).attr('alt', attachment.alt || '');
+            $preview.show();
+
+            // Show clear button
+            $('#clear-logo').show();
+        }
+
+        clearLogo() {
+            // Clear form fields
+            $('#logo-id').val('0');
+            $('#logo-src').val('');
+            $('#logo-alt').val('');
+
+            // Hide preview and clear button
+            $('#logo-preview').hide();
+            $('#clear-logo').hide();
         }
 
         populateMediaList() {
@@ -405,6 +463,7 @@
             data.layers.top.subtitle = $('input[name="layers[top][subtitle]"]').val();
             data.layers.top.ctaText = $('input[name="layers[top][ctaText]"]').val();
             data.layers.top.ctaUrl = $('input[name="layers[top][ctaUrl]"]').val();
+            data.layers.top.logoId = parseInt($('input[name="layers[top][logoId]"]').val()) || 0;
             data.layers.top.logoSrc = $('input[name="layers[top][logoSrc]"]').val();
             data.layers.top.logoAlt = $('input[name="layers[top][logoAlt]"]').val();
 

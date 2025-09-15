@@ -206,15 +206,32 @@ class NSMHS_SettingsPage {
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php echo esc_html(__('ロゴURL', 'ns-media-hero-showcase')); ?></th>
+                                <th scope="row"><?php echo esc_html(__('ロゴ', 'ns-media-hero-showcase')); ?></th>
                                 <td>
-                                    <input type="url" name="layers[top][logoSrc]" value="<?php echo esc_attr($settings['layers']['top']['logoSrc']); ?>" class="regular-text">
+                                    <!-- Hidden fields for data storage -->
+                                    <input type="hidden" name="layers[top][logoId]" id="logo-id" value="<?php echo esc_attr($settings['layers']['top']['logoId'] ?? 0); ?>">
+                                    <input type="url" name="layers[top][logoSrc]" id="logo-src" value="<?php echo esc_attr($settings['layers']['top']['logoSrc']); ?>" class="regular-text" readonly placeholder="ロゴが選択されていません">
+
+                                    <!-- Logo selection buttons -->
+                                    <div class="nsmhs-logo-controls" style="margin-top: 5px;">
+                                        <button type="button" id="select-logo" class="button" aria-label="ロゴを選択">
+                                            ロゴを選択
+                                        </button>
+                                        <button type="button" id="clear-logo" class="button" aria-label="クリア" style="<?php echo empty($settings['layers']['top']['logoSrc']) ? 'display: none;' : ''; ?>">
+                                            クリア
+                                        </button>
+
+                                        <!-- Logo preview -->
+                                        <div id="logo-preview" style="display: inline-block; margin-left: 10px; vertical-align: middle; <?php echo empty($settings['layers']['top']['logoSrc']) ? 'display: none;' : ''; ?>">
+                                            <img src="<?php echo esc_url($settings['layers']['top']['logoSrc']); ?>" alt="" style="max-width: 32px; max-height: 32px; border: 1px solid #ddd;">
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th scope="row"><?php echo esc_html(__('ロゴALT', 'ns-media-hero-showcase')); ?></th>
                                 <td>
-                                    <input type="text" name="layers[top][logoAlt]" value="<?php echo esc_attr($settings['layers']['top']['logoAlt']); ?>" class="regular-text">
+                                    <input type="text" name="layers[top][logoAlt]" id="logo-alt" value="<?php echo esc_attr($settings['layers']['top']['logoAlt']); ?>" class="regular-text" placeholder="ロゴの代替テキスト">
                                 </td>
                             </tr>
                         </table>

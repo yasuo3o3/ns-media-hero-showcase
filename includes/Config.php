@@ -55,6 +55,7 @@ class NSMHS_Config {
                     'subtitle' => '',
                     'ctaText' => '',
                     'ctaUrl' => '',
+                    'logoId' => 0,
                     'logoSrc' => '',
                     'logoAlt' => ''
                 ]
@@ -140,12 +141,55 @@ class NSMHS_Config {
                 'subtitle' => sanitize_text_field($input['layers']['top']['subtitle'] ?? ''),
                 'ctaText' => sanitize_text_field($input['layers']['top']['ctaText'] ?? ''),
                 'ctaUrl' => esc_url_raw($input['layers']['top']['ctaUrl'] ?? ''),
-                'logoSrc' => esc_url_raw($input['layers']['top']['logoSrc'] ?? ''),
+                'logoId' => $this->validate_logo_id($input['layers']['top']['logoId'] ?? 0),
+                'logoSrc' => $this->validate_logo_url($input['layers']['top']['logoSrc'] ?? ''),
                 'logoAlt' => sanitize_text_field($input['layers']['top']['logoAlt'] ?? '')
             ]
         ];
 
         return $validated;
+    }
+
+    private function validate_logo_id($logo_id) {
+        $logo_id = absint($logo_id);
+
+        if ($logo_id > 0) {
+            // Check if attachment exists and is an image
+            $attachment = get_post($logo_id);
+            if (!$attachment || $attachment->post_type !== 'attachment') {
+                return 0;
+            }
+
+            $mime_type = get_post_mime_type($logo_id);
+            if (!$mime_type || strpos($mime_type, 'image/') !== 0) {
+                return 0;
+            }
+        }
+
+        return $logo_id;
+    }
+
+    private function validate_logo_url($logo_url) {
+        $logo_url = esc_url_raw($logo_url);
+
+        if (!empty($logo_url)) {
+            // Check MIME type if URL is provided
+            $file_info = wp_check_filetype($logo_url);
+            $allowed_image_types = [
+                'jpg' => 'image/jpeg',
+                'jpeg' => 'image/jpeg',
+                'png' => 'image/png',
+                'gif' => 'image/gif',
+                'webp' => 'image/webp',
+                'svg' => 'image/svg+xml'
+            ];
+
+            if (!empty($file_info['ext']) && !array_key_exists($file_info['ext'], $allowed_image_types)) {
+                return '';
+            }
+        }
+
+        return $logo_url;
     }
 
     public function save_settings($settings) {

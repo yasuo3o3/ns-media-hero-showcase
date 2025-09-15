@@ -66,10 +66,9 @@ class NSMHS_Render {
             <!-- Top Layer -->
             <div class="nsmhs-top-layer">
                 <div class="nsmhs-content-container">
-                    <?php if (!empty($settings['layers']['top']['logoSrc'])): ?>
+                    <?php if (!empty($settings['layers']['top']['logoSrc']) || !empty($settings['layers']['top']['logoId'])): ?>
                     <div class="nsmhs-logo">
-                        <img src="<?php echo esc_url($settings['layers']['top']['logoSrc']); ?>"
-                             alt="<?php echo esc_attr($settings['layers']['top']['logoAlt']); ?>">
+                        <?php echo $this->render_logo($settings['layers']['top']); ?>
                     </div>
                     <?php endif; ?>
 
@@ -206,5 +205,39 @@ class NSMHS_Render {
         }
 
         return $order;
+    }
+
+    private function render_logo($logo_settings) {
+        $logo_id = $logo_settings['logoId'] ?? 0;
+        $logo_src = $logo_settings['logoSrc'] ?? '';
+        $logo_alt = $logo_settings['logoAlt'] ?? '';
+
+        // Priority: Use attachment ID if available
+        if (!empty($logo_id) && is_numeric($logo_id)) {
+            $attachment_id = absint($logo_id);
+
+            // Check if attachment exists and is an image
+            if (wp_attachment_is_image($attachment_id)) {
+                $image_attributes = [
+                    'alt' => $logo_alt,
+                    'decoding' => 'async',
+                    'fetchpriority' => 'high',
+                    'draggable' => 'false'
+                ];
+
+                return wp_get_attachment_image($attachment_id, 'full', false, $image_attributes);
+            }
+        }
+
+        // Fallback to URL method (backward compatibility)
+        if (!empty($logo_src)) {
+            return sprintf(
+                '<img src="%s" alt="%s" decoding="async" fetchpriority="high" draggable="false">',
+                esc_url($logo_src),
+                esc_attr($logo_alt)
+            );
+        }
+
+        return '';
     }
 }
