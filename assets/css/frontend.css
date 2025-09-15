@@ -17,6 +17,7 @@
 }
 
 /* Hero Showcase Container */
+.ns-hero,
 .nsmhs-hero-showcase {
   position: relative;
   width: 100%;
@@ -26,6 +27,7 @@
 }
 
 /* Media Tiles Container */
+.ns-hero__tiles,
 .nsmhs-tiles-container {
   position: absolute;
   top: 0;
@@ -39,6 +41,7 @@
 
 /* Responsive Grid Layout */
 @media (min-width: 1024px) {
+  .ns-hero__tiles,
   .nsmhs-tiles-container {
     grid-template-columns: repeat(var(--nsmhs-pc-cols), 1fr);
     grid-template-rows: repeat(var(--nsmhs-pc-rows), 1fr);
@@ -46,6 +49,7 @@
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
+  .ns-hero__tiles,
   .nsmhs-tiles-container {
     grid-template-columns: repeat(var(--nsmhs-tablet-cols), 1fr);
     grid-template-rows: repeat(var(--nsmhs-tablet-rows), 1fr);
@@ -53,6 +57,7 @@
 }
 
 @media (max-width: 767px) {
+  .ns-hero__tiles,
   .nsmhs-tiles-container {
     grid-template-columns: repeat(var(--nsmhs-phone-cols), 1fr);
     grid-template-rows: repeat(var(--nsmhs-phone-rows), 1fr);
@@ -244,6 +249,41 @@
 
   .nsmhs-content-container {
     padding: 1rem;
+  }
+}
+
+/* Overlay Styles */
+.ns-hero__mid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ns-hero__mid canvas {
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: var(--overlay-blend, normal);
+  opacity: var(--overlay-opacity, 0.25);
+}
+
+.ns-hero__top {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Ensure interactive elements have pointer-events */
+.ns-hero__top .nsmhs-cta-button,
+.ns-hero__top .nsmhs-logo {
+  pointer-events: auto;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .ns-hero__mid canvas {
+    display: none;
   }
 }
 

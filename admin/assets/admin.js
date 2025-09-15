@@ -457,7 +457,13 @@
             // Collect layers
             data.layers.mid.enabled = $('input[name="layers[mid][enabled]"]').is(':checked');
             data.layers.mid.shadowStrength = parseFloat($('input[name="layers[mid][shadowStrength]"]').val());
-            data.layers.mid.overlayVideoSrc = $('input[name="layers[mid][overlayVideoSrc]"]').val();
+            data.layers.mid.overlay = {
+                type: $('select[name="layers[mid][overlay][type]"]').val(),
+                opacity: parseFloat($('input[name="layers[mid][overlay][opacity]"]').val()),
+                speed: parseFloat($('input[name="layers[mid][overlay][speed]"]').val()),
+                density: $('select[name="layers[mid][overlay][density]"]').val(),
+                blendMode: $('select[name="layers[mid][overlay][blendMode]"]').val()
+            };
 
             data.layers.top.title = $('input[name="layers[top][title]"]').val();
             data.layers.top.subtitle = $('input[name="layers[top][subtitle]"]').val();

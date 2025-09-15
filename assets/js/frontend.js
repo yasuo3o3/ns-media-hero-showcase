@@ -28,6 +28,10 @@
             this.isVisible = false;
             this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+            // Overlay control
+            this.overlayInstance = null;
+            this.overlayModule = null;
+
             this.init();
         }
 
@@ -72,6 +76,7 @@
             this.setupIntersectionObserver();
             this.setupVisibilityHandling();
             this.setupReducedMotionHandling();
+            this.initializeOverlay();
 
             // Start the animation if tiles are available
             if (this.tiles.length > 0) {
@@ -119,8 +124,10 @@
                     this.isVisible = entry.isIntersecting;
                     if (this.isVisible && !this.isPlaying) {
                         this.resumeAnimation();
+                        this.startOverlay();
                     } else if (!this.isVisible && this.isPlaying) {
                         this.pauseAnimation();
+                        this.stopOverlay();
                     }
                 });
             }, {
@@ -134,8 +141,10 @@
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
                     this.pauseAnimation();
+                    this.stopOverlay();
                 } else if (this.isVisible) {
                     this.resumeAnimation();
+                    this.startOverlay();
                 }
             });
         }
@@ -144,8 +153,11 @@
             const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
             mediaQuery.addEventListener('change', (e) => {
                 this.prefersReducedMotion = e.matches;
-                if (this.prefersReducedMotion && this.isPlaying) {
+                if (this.prefersReducedMotion) {
                     this.adjustForReducedMotion();
+                    this.stopOverlay();
+                } else if (this.isVisible) {
+                    this.startOverlay();
                 }
             });
         }
@@ -330,17 +342,88 @@
             }
         }
 
+        async initializeOverlay() {
+            const midLayer = this.element.querySelector('.ns-hero__mid');
+            if (!midLayer) return;
+
+            const overlayType = midLayer.dataset.overlayType;
+            if (!overlayType || overlayType === 'none') return;
+
+            try {
+                // Dynamic import of overlay module
+                this.overlayModule = await import(`./overlays/${overlayType}.js`);
+
+                // Create canvas element
+                const canvas = document.createElement('canvas');
+                midLayer.appendChild(canvas);
+
+                // Extract settings from data attributes
+                const overlaySettings = {
+                    opacity: parseFloat(midLayer.dataset.overlayOpacity) || 0.25,
+                    speed: parseFloat(midLayer.dataset.overlaySpeed) || 1,
+                    density: midLayer.dataset.overlayDensity || 'medium',
+                    blendMode: midLayer.dataset.overlayBlend || 'normal'
+                };
+
+                // Environment settings
+                const env = {
+                    reducedMotion: this.prefersReducedMotion,
+                    pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
+                    capFps: true,
+                    width: canvas.offsetWidth,
+                    height: canvas.offsetHeight
+                };
+
+                // Initialize overlay
+                this.overlayInstance = this.overlayModule.init(canvas, overlaySettings, env);
+
+                // Start if visible and not reduced motion
+                if (this.isVisible && !this.prefersReducedMotion) {
+                    this.overlayInstance.start();
+                }
+
+                // Setup resize handling
+                window.addEventListener('resize', this.handleOverlayResize.bind(this));
+
+            } catch (error) {
+                console.warn(`Failed to load overlay module ${overlayType}:`, error);
+            }
+        }
+
+        handleOverlayResize() {
+            if (this.overlayInstance && this.overlayInstance.resize) {
+                this.overlayInstance.resize();
+            }
+        }
+
+        startOverlay() {
+            if (this.overlayInstance && !this.prefersReducedMotion && this.isVisible) {
+                this.overlayInstance.start();
+            }
+        }
+
+        stopOverlay() {
+            if (this.overlayInstance) {
+                this.overlayInstance.stop();
+            }
+        }
+
         destroy() {
             this.stopAnimation();
+            this.stopOverlay();
+            if (this.overlayInstance && this.overlayInstance.destroy) {
+                this.overlayInstance.destroy();
+            }
             if (this.observer) {
                 this.observer.disconnect();
             }
+            window.removeEventListener('resize', this.handleOverlayResize);
         }
     }
 
     // Initialize all showcase instances when DOM is ready
     function initShowcases() {
-        const showcases = document.querySelectorAll('.nsmhs-hero-showcase');
+        const showcases = document.querySelectorAll('.ns-hero, .nsmhs-hero-showcase');
         showcases.forEach(element => {
             if (!element.nsmhsInstance) {
                 element.nsmhsInstance = new NSMediaHeroShowcase(element);

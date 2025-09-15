@@ -172,9 +172,49 @@ class NSMHS_SettingsPage {
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row"><?php echo esc_html(__('オーバーレイ動画URL', 'ns-media-hero-showcase')); ?></th>
+                                <th scope="row"><?php echo esc_html(__('オーバーレイ種類', 'ns-media-hero-showcase')); ?></th>
                                 <td>
-                                    <input type="url" name="layers[mid][overlayVideoSrc]" value="<?php echo esc_attr($settings['layers']['mid']['overlayVideoSrc']); ?>" class="regular-text">
+                                    <select name="layers[mid][overlay][type]">
+                                        <option value="none" <?php selected($settings['layers']['mid']['overlay']['type'], 'none'); ?>>なし</option>
+                                        <option value="constellation" <?php selected($settings['layers']['mid']['overlay']['type'], 'constellation'); ?>>コンステレーション</option>
+                                        <option value="morph-polygons" <?php selected($settings['layers']['mid']['overlay']['type'], 'morph-polygons'); ?>>モーフポリゴン</option>
+                                        <option value="soft-waves" <?php selected($settings['layers']['mid']['overlay']['type'], 'soft-waves'); ?>>ソフトウェーブ</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php echo esc_html(__('オーバーレイ透明度', 'ns-media-hero-showcase')); ?></th>
+                                <td>
+                                    <input type="range" name="layers[mid][overlay][opacity]" value="<?php echo esc_attr($settings['layers']['mid']['overlay']['opacity']); ?>" min="0" max="1" step="0.05">
+                                    <span class="nsmhs-range-value"><?php echo esc_html($settings['layers']['mid']['overlay']['opacity']); ?></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php echo esc_html(__('アニメーション速度', 'ns-media-hero-showcase')); ?></th>
+                                <td>
+                                    <input type="range" name="layers[mid][overlay][speed]" value="<?php echo esc_attr($settings['layers']['mid']['overlay']['speed']); ?>" min="0.25" max="2" step="0.25">
+                                    <span class="nsmhs-range-value"><?php echo esc_html($settings['layers']['mid']['overlay']['speed']); ?></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php echo esc_html(__('密度', 'ns-media-hero-showcase')); ?></th>
+                                <td>
+                                    <select name="layers[mid][overlay][density]">
+                                        <option value="low" <?php selected($settings['layers']['mid']['overlay']['density'], 'low'); ?>>低</option>
+                                        <option value="medium" <?php selected($settings['layers']['mid']['overlay']['density'], 'medium'); ?>>中</option>
+                                        <option value="high" <?php selected($settings['layers']['mid']['overlay']['density'], 'high'); ?>>高</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row"><?php echo esc_html(__('ブレンドモード', 'ns-media-hero-showcase')); ?></th>
+                                <td>
+                                    <select name="layers[mid][overlay][blendMode]">
+                                        <option value="normal" <?php selected($settings['layers']['mid']['overlay']['blendMode'], 'normal'); ?>>通常</option>
+                                        <option value="screen" <?php selected($settings['layers']['mid']['overlay']['blendMode'], 'screen'); ?>>スクリーン</option>
+                                        <option value="overlay" <?php selected($settings['layers']['mid']['overlay']['blendMode'], 'overlay'); ?>>オーバーレイ</option>
+                                        <option value="multiply" <?php selected($settings['layers']['mid']['overlay']['blendMode'], 'multiply'); ?>>乗算</option>
+                                    </select>
                                 </td>
                             </tr>
                         </table>

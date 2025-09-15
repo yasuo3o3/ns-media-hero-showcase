@@ -48,7 +48,13 @@ class NSMHS_Config {
                 'mid' => [
                     'enabled' => true,
                     'shadowStrength' => 0.25,
-                    'overlayVideoSrc' => ''
+                    'overlay' => [
+                        'type' => 'constellation',
+                        'opacity' => 0.25,
+                        'speed' => 1,
+                        'density' => 'medium',
+                        'blendMode' => 'normal'
+                    ]
                 ],
                 'top' => [
                     'title' => '',
@@ -134,7 +140,7 @@ class NSMHS_Config {
             'mid' => [
                 'enabled' => !empty($input['layers']['mid']['enabled']),
                 'shadowStrength' => max(0, min(1, floatval($input['layers']['mid']['shadowStrength'] ?? 0.25))),
-                'overlayVideoSrc' => esc_url_raw($input['layers']['mid']['overlayVideoSrc'] ?? '')
+                'overlay' => $this->validate_overlay_settings($input['layers']['mid']['overlay'] ?? [])
             ],
             'top' => [
                 'title' => sanitize_text_field($input['layers']['top']['title'] ?? ''),
@@ -190,6 +196,22 @@ class NSMHS_Config {
         }
 
         return $logo_url;
+    }
+
+    private function validate_overlay_settings($overlay_input) {
+        $allowed_types = ['none', 'constellation', 'morph-polygons', 'soft-waves'];
+        $allowed_densities = ['low', 'medium', 'high'];
+        $allowed_blend_modes = ['normal', 'screen', 'overlay', 'multiply'];
+
+        $validated = [
+            'type' => in_array($overlay_input['type'] ?? '', $allowed_types) ? $overlay_input['type'] : 'constellation',
+            'opacity' => max(0, min(1, floatval($overlay_input['opacity'] ?? 0.25))),
+            'speed' => max(0.25, min(2, floatval($overlay_input['speed'] ?? 1))),
+            'density' => in_array($overlay_input['density'] ?? '', $allowed_densities) ? $overlay_input['density'] : 'medium',
+            'blendMode' => in_array($overlay_input['blendMode'] ?? '', $allowed_blend_modes) ? $overlay_input['blendMode'] : 'normal'
+        ];
+
+        return $validated;
     }
 
     public function save_settings($settings) {

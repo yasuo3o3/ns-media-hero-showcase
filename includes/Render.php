@@ -35,13 +35,13 @@ class NSMHS_Render {
         ob_start();
         ?>
         <div id="<?php echo esc_attr($id); ?>"
-             class="nsmhs-hero-showcase"
+             class="ns-hero"
              role="region"
              aria-label="<?php echo esc_attr__('Hero showcase', 'ns-media-hero-showcase'); ?>"
              style="<?php echo esc_attr($css_vars); ?>">
 
             <!-- Background Media Tiles -->
-            <div class="nsmhs-tiles-container">
+            <div class="ns-hero__tiles">
                 <?php $this->render_media_tiles($settings); ?>
             </div>
 
@@ -52,19 +52,18 @@ class NSMHS_Render {
 
             <?php if ($settings['layers']['mid']['enabled']): ?>
             <!-- Middle Layer -->
-            <div class="nsmhs-middle-layer">
+            <div class="ns-hero__mid"
+                 data-overlay-type="<?php echo esc_attr($settings['layers']['mid']['overlay']['type']); ?>"
+                 data-overlay-opacity="<?php echo esc_attr($settings['layers']['mid']['overlay']['opacity']); ?>"
+                 data-overlay-speed="<?php echo esc_attr($settings['layers']['mid']['overlay']['speed']); ?>"
+                 data-overlay-density="<?php echo esc_attr($settings['layers']['mid']['overlay']['density']); ?>"
+                 data-overlay-blend="<?php echo esc_attr($settings['layers']['mid']['overlay']['blendMode']); ?>">
                 <div class="nsmhs-shadow-overlay"></div>
-                <?php if (!empty($settings['layers']['mid']['overlayVideoSrc'])): ?>
-                <video class="nsmhs-overlay-video"
-                       src="<?php echo esc_url($settings['layers']['mid']['overlayVideoSrc']); ?>"
-                       muted autoplay playsinline loop preload="metadata">
-                </video>
-                <?php endif; ?>
             </div>
             <?php endif; ?>
 
             <!-- Top Layer -->
-            <div class="nsmhs-top-layer">
+            <div class="ns-hero__top">
                 <div class="nsmhs-content-container">
                     <?php if (!empty($settings['layers']['top']['logoSrc']) || !empty($settings['layers']['top']['logoId'])): ?>
                     <div class="nsmhs-logo">
@@ -165,6 +164,8 @@ class NSMHS_Render {
             '--nsmhs-opacity' => $settings['effects']['opacity'],
             '--nsmhs-blur' => $settings['effects']['blurPx'] . 'px',
             '--nsmhs-shadow-strength' => $settings['layers']['mid']['shadowStrength'],
+            '--overlay-opacity' => $settings['layers']['mid']['overlay']['opacity'],
+            '--overlay-blend' => $settings['layers']['mid']['overlay']['blendMode'],
             '--nsmhs-pc-cols' => $this->config->parse_grid($settings['grids']['pc'])['cols'],
             '--nsmhs-pc-rows' => $this->config->parse_grid($settings['grids']['pc'])['rows'],
             '--nsmhs-tablet-cols' => $this->config->parse_grid($settings['grids']['tablet'])['cols'],
