@@ -233,27 +233,20 @@
             this.zoomContent.innerHTML = '';
             this.zoomContent.appendChild(mediaClone);
 
-            // Calculate zoom transform with center-based FLIP
+            // Calculate zoom transform
             const tileRect = tile.element.getBoundingClientRect();
             const containerRect = this.element.getBoundingClientRect();
 
             const scale = Math.max(containerRect.width / tileRect.width, containerRect.height / tileRect.height);
 
-            // Center coordinates (container-relative)
-            const tileCenterX = tileRect.left - containerRect.left + tileRect.width / 2;
-            const tileCenterY = tileRect.top - containerRect.top + tileRect.height / 2;
-            const containerCenterX = containerRect.width / 2;
-            const containerCenterY = containerRect.height / 2;
-
-            const translateX = containerCenterX - tileCenterX;
-            const translateY = containerCenterY - tileCenterY;
-
             // Set dimensions
             this.zoomContent.style.width = `${containerRect.width}px`;
             this.zoomContent.style.height = `${containerRect.height}px`;
 
-            // Initial transform: tile position
+            // Initial state: tile position with opacity and blur
             this.zoomContent.style.transform = `translate(${tileRect.left - containerRect.left}px, ${tileRect.top - containerRect.top}px) scale(${1/scale})`;
+            this.zoomContent.style.opacity = '0';
+            this.zoomContent.style.filter = `blur(var(--nsmhs-blur))`;
 
             // Show zoom content
             this.zoomContent.classList.add('nsmhs-active');
@@ -267,8 +260,10 @@
 
                 const duration = this.prefersReducedMotion ? 300 : this.settings.timing.zoomInDuration;
 
-                this.zoomContent.style.transition = `transform ${duration}ms var(--nsmhs-easing)`;
-                this.zoomContent.style.transform = `translate(${translateX}px, ${translateY}px) scale(1)`;
+                this.zoomContent.style.transition = `transform ${duration}ms var(--nsmhs-easing), opacity ${duration}ms var(--nsmhs-easing), filter ${duration}ms var(--nsmhs-easing)`;
+                this.zoomContent.style.transform = `translate(0px, 0px) scale(1)`;
+                this.zoomContent.style.opacity = '1';
+                this.zoomContent.style.filter = 'none';
 
                 // Start video after animation begins
                 this.startMediaPlayback(mediaClone);
@@ -287,9 +282,10 @@
 
             const duration = this.prefersReducedMotion ? 300 : this.settings.timing.zoomOutDuration;
 
-            // Animate out
-            this.zoomContent.style.transition = `opacity ${duration}ms var(--nsmhs-easing), transform ${duration}ms var(--nsmhs-easing)`;
+            // Animate out with blur
+            this.zoomContent.style.transition = `opacity ${duration}ms var(--nsmhs-easing), filter ${duration}ms var(--nsmhs-easing), transform ${duration}ms var(--nsmhs-easing)`;
             this.zoomContent.style.opacity = '0';
+            this.zoomContent.style.filter = `blur(var(--nsmhs-blur))`;
             this.zoomContent.style.transform = 'scale(1.1)';
 
             // Remove tile effects
