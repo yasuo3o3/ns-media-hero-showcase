@@ -1,0 +1,182 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: NS Media Hero Showcase 0.01\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: admin/SettingsPage.php:25
+msgid "NS Media Hero Showcase 設定"
+msgstr ""
+
+#: admin/SettingsPage.php:26
+msgid "Media Hero Showcase"
+msgstr ""
+
+#: admin/SettingsPage.php:38
+msgid "メディア設定"
+msgstr ""
+
+#: admin/SettingsPage.php:44
+msgid "メディアを追加"
+msgstr ""
+
+#: admin/SettingsPage.php:50
+msgid "グリッド設定"
+msgstr ""
+
+#: admin/SettingsPage.php:54
+msgid "PC"
+msgstr ""
+
+#: admin/SettingsPage.php:64
+msgid "タブレット"
+msgstr ""
+
+#: admin/SettingsPage.php:74
+msgid "スマホ"
+msgstr ""
+
+#: admin/SettingsPage.php:86
+msgid "アニメーション設定"
+msgstr ""
+
+#: admin/SettingsPage.php:90
+msgid "順序"
+msgstr ""
+
+#: admin/SettingsPage.php:93
+msgid "左上→右下"
+msgstr ""
+
+#: admin/SettingsPage.php:96
+msgid "右上→左下"
+msgstr ""
+
+#: admin/SettingsPage.php:101
+msgid "表示時間(ms)"
+msgstr ""
+
+#: admin/SettingsPage.php:106
+msgid "ズームイン時間(ms)"
+msgstr ""
+
+#: admin/SettingsPage.php:111
+msgid "ズームアウト時間(ms)"
+msgstr ""
+
+#: admin/SettingsPage.php:116
+msgid "透明度"
+msgstr ""
+
+#: admin/SettingsPage.php:122
+msgid "ブラー(px)"
+msgstr ""
+
+#: admin/SettingsPage.php:131
+msgid "レイヤー設定"
+msgstr ""
+
+#: admin/SettingsPage.php:133
+msgid "中間レイヤー"
+msgstr ""
+
+#: admin/SettingsPage.php:137
+msgid "有効"
+msgstr ""
+
+#: admin/SettingsPage.php:140
+msgid "中間レイヤーを有効にする"
+msgstr ""
+
+#: admin/SettingsPage.php:145
+msgid "影の強さ"
+msgstr ""
+
+#: admin/SettingsPage.php:151
+msgid "オーバーレイ動画URL"
+msgstr ""
+
+#: admin/SettingsPage.php:157
+msgid "最上レイヤー"
+msgstr ""
+
+#: admin/SettingsPage.php:161
+msgid "タイトル"
+msgstr ""
+
+#: admin/SettingsPage.php:166
+msgid "サブタイトル"
+msgstr ""
+
+#: admin/SettingsPage.php:171
+msgid "CTAテキスト"
+msgstr ""
+
+#: admin/SettingsPage.php:176
+msgid "CTAURL"
+msgstr ""
+
+#: admin/SettingsPage.php:181
+msgid "ロゴURL"
+msgstr ""
+
+#: admin/SettingsPage.php:186
+msgid "ロゴALT"
+msgstr ""
+
+#: admin/SettingsPage.php:194
+msgid "設定を保存"
+msgstr ""
+
+#: includes/Config.php:91
+msgid "権限がありません"
+msgstr ""
+
+#: includes/Config.php:95
+msgid "セキュリティチェックに失敗しました"
+msgstr ""
+
+#: includes/Config.php:101
+msgid "無効な設定データです"
+msgstr ""
+
+#: includes/Config.php:106
+msgid "設定を保存しました"
+msgstr ""
+
+#: includes/Config.php:108
+msgid "設定の保存に失敗しました"
+msgstr ""
+
+#: includes/Render.php:25
+msgid "メディアが設定されていません。管理画面で設定してください。"
+msgstr ""
+
+#: includes/Render.php:37
+msgid "Hero showcase"
+msgstr ""
+
+#: ns-media-hero-showcase.php:76
+msgid "設定を保存しました"
+msgstr ""
+
+#: ns-media-hero-showcase.php:77
+msgid "設定の保存に失敗しました"
+msgstr ""
+
+#: ns-media-hero-showcase.php:78
+msgid "このメディアを削除しますか？"
+msgstr ""

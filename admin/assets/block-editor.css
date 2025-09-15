@@ -1,0 +1,202 @@
+/* NS Media Hero Showcase Block Editor Styles */
+
+.nsmhs-block-editor {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f9f9f9;
+}
+
+.nsmhs-block-preview {
+    position: relative;
+    height: 300px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+}
+
+.nsmhs-preview-header {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    border-radius: 4px;
+    max-width: 200px;
+}
+
+.nsmhs-preview-header h3 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.nsmhs-preview-header p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.nsmhs-preview-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1px;
+    z-index: 1;
+}
+
+.nsmhs-preview-tile {
+    background: #ddd;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    animation: nsmhs-preview-pulse 2s ease-in-out infinite;
+}
+
+.nsmhs-preview-tile:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+@keyframes nsmhs-preview-pulse {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 0.9;
+    }
+}
+
+.nsmhs-preview-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 5;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.nsmhs-preview-overlay h1 {
+    font-size: 24px;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+}
+
+.nsmhs-preview-overlay p {
+    font-size: 14px;
+    margin: 0 0 15px 0;
+    opacity: 0.9;
+}
+
+.nsmhs-preview-cta {
+    display: inline-block;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    text-decoration: none;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.nsmhs-preview-cta:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgba(255, 255, 255, 0.8);
+    color: white;
+    text-decoration: none;
+}
+
+/* Inspector Controls Styling */
+.components-panel__body .nsmhs-block-editor p {
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.components-external-link {
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.components-external-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nsmhs-preview-grid {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+    }
+
+    .nsmhs-preview-tile:nth-child(n+7) {
+        display: none;
+    }
+
+    .nsmhs-preview-overlay h1 {
+        font-size: 20px;
+    }
+
+    .nsmhs-preview-overlay p {
+        font-size: 12px;
+    }
+
+    .nsmhs-preview-cta {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+}
+
+/* Dark Theme Support */
+.is-dark-theme .nsmhs-block-editor {
+    border-color: #3c434a;
+    background: #1e1e1e;
+}
+
+.is-dark-theme .nsmhs-preview-header {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .nsmhs-block-editor {
+        border-width: 3px;
+        border-color: #000;
+    }
+
+    .nsmhs-preview-overlay {
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 1);
+    }
+
+    .nsmhs-preview-cta {
+        border-width: 3px;
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* Animation Preferences */
+@media (prefers-reduced-motion: reduce) {
+    .nsmhs-preview-tile {
+        animation: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .nsmhs-preview-tile:hover {
+        transform: none;
+    }
+
+    .nsmhs-preview-cta {
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+}
