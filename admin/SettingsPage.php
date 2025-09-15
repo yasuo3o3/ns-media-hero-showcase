@@ -62,6 +62,7 @@ class NSMHS_SettingsPage {
                                 <td>
                                     <select name="grids[pc]" id="grid-pc">
                                         <option value="3x2" <?php selected($settings['grids']['pc'], '3x2'); ?>>3x2 (6)</option>
+                                        <option value="3x3" <?php selected($settings['grids']['pc'], '3x3'); ?>>3x3 (9)</option>
                                         <option value="3x4" <?php selected($settings['grids']['pc'], '3x4'); ?>>3x4 (12)</option>
                                         <option value="3x5" <?php selected($settings['grids']['pc'], '3x5'); ?>>3x5 (15)</option>
                                         <option value="4x2" <?php selected($settings['grids']['pc'], '4x2'); ?>>4x2 (8)</option>
@@ -77,6 +78,7 @@ class NSMHS_SettingsPage {
                                 <td>
                                     <select name="grids[tablet]" id="grid-tablet">
                                         <option value="3x2" <?php selected($settings['grids']['tablet'], '3x2'); ?>>3x2 (6)</option>
+                                        <option value="3x3" <?php selected($settings['grids']['tablet'], '3x3'); ?>>3x3 (9)</option>
                                         <option value="3x4" <?php selected($settings['grids']['tablet'], '3x4'); ?>>3x4 (12)</option>
                                         <option value="3x5" <?php selected($settings['grids']['tablet'], '3x5'); ?>>3x5 (15)</option>
                                         <option value="4x2" <?php selected($settings['grids']['tablet'], '4x2'); ?>>4x2 (8)</option>
@@ -92,6 +94,7 @@ class NSMHS_SettingsPage {
                                 <td>
                                     <select name="grids[phone]" id="grid-phone">
                                         <option value="3x2" <?php selected($settings['grids']['phone'], '3x2'); ?>>3x2 (6)</option>
+                                        <option value="3x3" <?php selected($settings['grids']['phone'], '3x3'); ?>>3x3 (9)</option>
                                         <option value="3x4" <?php selected($settings['grids']['phone'], '3x4'); ?>>3x4 (12)</option>
                                         <option value="3x5" <?php selected($settings['grids']['phone'], '3x5'); ?>>3x5 (15)</option>
                                         <option value="4x2" <?php selected($settings['grids']['phone'], '4x2'); ?>>4x2 (8)</option>
