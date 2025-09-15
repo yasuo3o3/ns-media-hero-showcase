@@ -251,13 +251,21 @@
 
                 if (zoomFromTile) {
                     // New tile-to-center animation
-                    const tileCenterX = tileRect.left + tileRect.width / 2;
-                    const tileCenterY = tileRect.top + tileRect.height / 2;
-                    const containerCenterX = containerRect.left + containerRect.width / 2;
-                    const containerCenterY = containerRect.top + containerRect.height / 2;
+                    // Calculate tile center relative to container
+                    const tileRelativeLeft = tileRect.left - containerRect.left;
+                    const tileRelativeTop = tileRect.top - containerRect.top;
+                    const tileCenterX = tileRelativeLeft + tileRect.width / 2;
+                    const tileCenterY = tileRelativeTop + tileRect.height / 2;
 
+                    // Container center is at (width/2, height/2)
+                    const containerCenterX = containerRect.width / 2;
+                    const containerCenterY = containerRect.height / 2;
+
+                    // Calculate translation from tile center to container center
                     const deltaX = containerCenterX - tileCenterX;
                     const deltaY = containerCenterY - tileCenterY;
+
+                    // Calculate scale from tile size to a reasonable zoom size (not full container)
                     const scaleFromTile = Math.min(tileRect.width / containerRect.width, tileRect.height / containerRect.height);
 
                     initialTransform = `translate(${deltaX}px, ${deltaY}px) scale(${scaleFromTile})`;
