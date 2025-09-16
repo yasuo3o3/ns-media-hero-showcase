@@ -333,7 +333,8 @@
             setTimeout(() => {
                 this.resetZoom();
                 if (!this.isPaused && this.isPlaying) {
-                    this.timeoutId = setTimeout(() => this.nextTile(), 100);
+                    const intervalDelay = this.settings.timing.intervalDelay || 100;
+                    this.timeoutId = setTimeout(() => this.nextTile(), intervalDelay);
                 }
             }, duration);
         }

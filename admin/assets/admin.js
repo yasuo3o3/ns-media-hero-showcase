@@ -448,6 +448,7 @@
             data.timing.displayDuration = parseInt($('input[name="timing[displayDuration]"]').val());
             data.timing.zoomInDuration = parseInt($('input[name="timing[zoomInDuration]"]').val());
             data.timing.zoomOutDuration = parseInt($('input[name="timing[zoomOutDuration]"]').val());
+            data.timing.intervalDelay = parseInt($('input[name="timing[intervalDelay]"]').val());
             data.timing.easing = 'ease-in-out';
 
             // Collect effects

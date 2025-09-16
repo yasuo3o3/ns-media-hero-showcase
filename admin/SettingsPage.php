@@ -160,6 +160,13 @@ class NSMHS_SettingsPage {
                                 </td>
                             </tr>
                             <tr>
+                                <th scope="row"><?php echo esc_html(__('画像間待ち時間(ms)', 'ns-media-hero-showcase')); ?></th>
+                                <td>
+                                    <input type="number" name="timing[intervalDelay]" value="<?php echo esc_attr($settings['timing']['intervalDelay']); ?>" min="0" max="2000" step="50">
+                                    <p class="description"><?php echo esc_html(__('ズームアウト完了後、次のズームイン開始までの待ち時間', 'ns-media-hero-showcase')); ?></p>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row"><?php echo esc_html(__('透明度', 'ns-media-hero-showcase')); ?></th>
                                 <td>
                                     <input type="range" name="effects[opacity]" value="<?php echo esc_attr($settings['effects']['opacity']); ?>" min="0" max="1" step="0.1">

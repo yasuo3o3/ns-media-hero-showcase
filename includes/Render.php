@@ -192,6 +192,7 @@ class NSMHS_Render {
             '--nsmhs-display-duration' => $settings['timing']['displayDuration'] . 'ms',
             '--nsmhs-zoom-in-duration' => $settings['timing']['zoomInDuration'] . 'ms',
             '--nsmhs-zoom-out-duration' => $settings['timing']['zoomOutDuration'] . 'ms',
+            '--nsmhs-interval-delay' => $settings['timing']['intervalDelay'] . 'ms',
             '--nsmhs-easing' => $settings['timing']['easing'],
             '--nsmhs-opacity' => $settings['effects']['opacity'],
             '--nsmhs-blur' => $settings['effects']['blurPx'] . 'px',

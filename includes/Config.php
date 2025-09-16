@@ -38,6 +38,7 @@ class NSMHS_Config {
                 'displayDuration' => 3000,
                 'zoomInDuration' => 900,
                 'zoomOutDuration' => 700,
+                'intervalDelay' => 100,
                 'easing' => 'ease-in-out'
             ],
             'effects' => [
@@ -127,6 +128,7 @@ class NSMHS_Config {
             'displayDuration' => max(1000, min(10000, intval($input['timing']['displayDuration'] ?? 3000))),
             'zoomInDuration' => max(300, min(3000, intval($input['timing']['zoomInDuration'] ?? 900))),
             'zoomOutDuration' => max(300, min(3000, intval($input['timing']['zoomOutDuration'] ?? 700))),
+            'intervalDelay' => max(0, min(2000, intval($input['timing']['intervalDelay'] ?? 100))),
             'easing' => sanitize_text_field($input['timing']['easing'] ?? 'ease-in-out')
         ];
 
