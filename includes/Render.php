@@ -20,6 +20,7 @@ class NSMHS_Render {
 
     public function render_showcase($atts = []) {
         $settings = $this->config->get_settings();
+        $full_viewport = isset($atts['fullViewport']) ? $atts['fullViewport'] : false;
 
         if (empty($settings['media'])) {
             return '<div class="nsmhs-placeholder">' .
@@ -35,7 +36,7 @@ class NSMHS_Render {
         ob_start();
         ?>
         <div id="<?php echo esc_attr($id); ?>"
-             class="ns-hero"
+             class="ns-hero<?php echo $full_viewport ? ' is-full-viewport' : ''; ?>"
              role="region"
              aria-label="<?php echo esc_attr__('Hero showcase', 'ns-media-hero-showcase'); ?>"
              style="<?php echo esc_attr($css_vars); ?>"

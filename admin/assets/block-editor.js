@@ -8,7 +8,7 @@
     const { registerBlockType } = wp.blocks;
     const { createElement: el, useState, Fragment } = wp.element;
     const { InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
-    const { PanelBody, ExternalLink, Button, Notice } = wp.components;
+    const { PanelBody, ExternalLink, Button, Notice, ToggleControl } = wp.components;
 
     registerBlockType('nsmhs/hero-showcase', {
         title: nsmhsBlock.strings.title,
@@ -25,12 +25,16 @@
             tempMedia: {
                 type: 'array',
                 default: []
+            },
+            fullViewport: {
+                type: 'boolean',
+                default: false
             }
         },
 
         edit: function(props) {
             const { attributes, setAttributes } = props;
-            const { tempMedia } = attributes;
+            const { tempMedia, fullViewport } = attributes;
 
             const onSelectMedia = (media) => {
                 const newMedia = media.map(item => ({
@@ -50,7 +54,7 @@
             };
 
             return el('div', {
-                className: 'nsmhs-block-editor'
+                className: fullViewport ? 'nsmhs-block-editor is-full-viewport' : 'nsmhs-block-editor'
             }, [
                 // Inspector Controls
                 el(InspectorControls, {
@@ -122,6 +126,18 @@
                             href: nsmhsBlock.settingsUrl,
                             key: 'settings-link'
                         }, nsmhsBlock.strings.settingsLink)
+                    ]),
+
+                    el(PanelBody, {
+                        title: '表示設定',
+                        key: 'display-settings'
+                    }, [
+                        el(ToggleControl, {
+                            label: 'フルビューポート（100vw/100svh）',
+                            checked: fullViewport,
+                            onChange: (value) => setAttributes({ fullViewport: value }),
+                            key: 'full-viewport'
+                        })
                     ])
                 ]),
 

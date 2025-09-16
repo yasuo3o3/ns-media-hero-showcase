@@ -31,6 +31,20 @@
   background: #000;
 }
 
+/* フルビューポート表示用スタイル */
+.ns-hero.is-full-viewport,
+.nsmhs-hero-showcase.is-full-viewport {
+  width: 100vw;
+  max-width: 100vw; /* 横スクロール防止 */
+  height: 100vh; /* 古いブラウザ向けフォールバック */
+  height: 100svh; /* 新しいブラウザでは100svhを優先 */
+  overflow: hidden;
+  aspect-ratio: auto; /* アスペクト比を無効化 */
+
+  /* 固定ヘッダー対策（上級者向け）*/
+  /* height: calc(100svh - var(--header-h, 0px)); */
+}
+
 /* Dynamic aspect-ratio based on grid configuration */
 @media (min-width: 1024px) {
   .ns-hero,

@@ -31,6 +31,10 @@ class NSMHS_Block {
                 'id' => [
                     'type' => 'string',
                     'default' => 'default'
+                ],
+                'fullViewport' => [
+                    'type' => 'boolean',
+                    'default' => false
                 ]
             ]
         ]);
