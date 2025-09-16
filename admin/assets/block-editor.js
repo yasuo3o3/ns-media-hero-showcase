@@ -8,7 +8,7 @@
     const { registerBlockType } = wp.blocks;
     const { createElement: el, useState, Fragment } = wp.element;
     const { InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
-    const { PanelBody, ExternalLink, Button, Notice, ToggleControl } = wp.components;
+    const { PanelBody, ExternalLink, Button, Notice, ToggleControl, SelectControl } = wp.components;
 
     registerBlockType('nsmhs/hero-showcase', {
         title: nsmhsBlock.strings.title,
@@ -29,12 +29,17 @@
             fullViewport: {
                 type: 'boolean',
                 default: false
+            },
+            logoPosition: {
+                type: 'string',
+                enum: ['aboveTitle', 'belowCTA'],
+                default: 'aboveTitle'
             }
         },
 
         edit: function(props) {
             const { attributes, setAttributes } = props;
-            const { tempMedia, fullViewport } = attributes;
+            const { tempMedia, fullViewport, logoPosition } = attributes;
 
             const onSelectMedia = (media) => {
                 const newMedia = media.map(item => ({
@@ -53,8 +58,12 @@
                 setAttributes({ tempMedia: newMedia });
             };
 
+            const editorClasses = ['nsmhs-block-editor'];
+            if (fullViewport) editorClasses.push('is-full-viewport');
+            if (logoPosition === 'belowCTA') editorClasses.push('logo-below-cta');
+
             return el('div', {
-                className: fullViewport ? 'nsmhs-block-editor is-full-viewport' : 'nsmhs-block-editor'
+                className: editorClasses.join(' ')
             }, [
                 // Inspector Controls
                 el(InspectorControls, {
@@ -137,6 +146,17 @@
                             checked: fullViewport,
                             onChange: (value) => setAttributes({ fullViewport: value }),
                             key: 'full-viewport'
+                        }),
+
+                        el(SelectControl, {
+                            label: 'ロゴ位置',
+                            value: logoPosition,
+                            options: [
+                                { label: '上（タイトル前）', value: 'aboveTitle' },
+                                { label: '下（CTA後）', value: 'belowCTA' }
+                            ],
+                            onChange: (value) => setAttributes({ logoPosition: value }),
+                            key: 'logo-position'
                         })
                     ])
                 ]),

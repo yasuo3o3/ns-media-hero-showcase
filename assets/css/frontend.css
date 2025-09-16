@@ -44,6 +44,11 @@
   /* height: calc(100svh - var(--header-h, 0px)); */
 }
 
+/* ロゴ位置変更時の調整 */
+.ns-hero.logo-below-cta .nsmhs-logo {
+  margin-top: 1rem;
+}
+
 /* Dynamic aspect-ratio based on grid configuration */
 @media (min-width: 1024px) {
   .ns-hero,

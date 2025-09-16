@@ -35,6 +35,11 @@ class NSMHS_Block {
                 'fullViewport' => [
                     'type' => 'boolean',
                     'default' => false
+                ],
+                'logoPosition' => [
+                    'type' => 'string',
+                    'enum' => ['aboveTitle', 'belowCTA'],
+                    'default' => 'aboveTitle'
                 ]
             ]
         ]);
