@@ -61,12 +61,17 @@ class NSMHS_SettingsPage {
                                 <th scope="row"><?php echo esc_html(__('PC', 'ns-media-hero-showcase')); ?></th>
                                 <td>
                                     <select name="grids[pc]" id="grid-pc">
+                                        <option value="2x3" <?php selected($settings['grids']['pc'], '2x3'); ?>>2x3 (6)</option>
+                                        <option value="2x4" <?php selected($settings['grids']['pc'], '2x4'); ?>>2x4 (8)</option>
+                                        <option value="2x5" <?php selected($settings['grids']['pc'], '2x5'); ?>>2x5 (10)</option>
+                                        <option value="2x6" <?php selected($settings['grids']['pc'], '2x6'); ?>>2x6 (12)</option>
                                         <option value="3x2" <?php selected($settings['grids']['pc'], '3x2'); ?>>3x2 (6)</option>
                                         <option value="3x3" <?php selected($settings['grids']['pc'], '3x3'); ?>>3x3 (9)</option>
                                         <option value="3x4" <?php selected($settings['grids']['pc'], '3x4'); ?>>3x4 (12)</option>
                                         <option value="3x5" <?php selected($settings['grids']['pc'], '3x5'); ?>>3x5 (15)</option>
                                         <option value="4x2" <?php selected($settings['grids']['pc'], '4x2'); ?>>4x2 (8)</option>
                                         <option value="4x3" <?php selected($settings['grids']['pc'], '4x3'); ?>>4x3 (12)</option>
+                                        <option value="4x4" <?php selected($settings['grids']['pc'], '4x4'); ?>>4x4 (16)</option>
                                         <option value="4x5" <?php selected($settings['grids']['pc'], '4x5'); ?>>4x5 (20)</option>
                                         <option value="5x3" <?php selected($settings['grids']['pc'], '5x3'); ?>>5x3 (15)</option>
                                         <option value="5x4" <?php selected($settings['grids']['pc'], '5x4'); ?>>5x4 (20)</option>
@@ -77,12 +82,17 @@ class NSMHS_SettingsPage {
                                 <th scope="row"><?php echo esc_html(__('タブレット', 'ns-media-hero-showcase')); ?></th>
                                 <td>
                                     <select name="grids[tablet]" id="grid-tablet">
+                                        <option value="2x3" <?php selected($settings['grids']['tablet'], '2x3'); ?>>2x3 (6)</option>
+                                        <option value="2x4" <?php selected($settings['grids']['tablet'], '2x4'); ?>>2x4 (8)</option>
+                                        <option value="2x5" <?php selected($settings['grids']['tablet'], '2x5'); ?>>2x5 (10)</option>
+                                        <option value="2x6" <?php selected($settings['grids']['tablet'], '2x6'); ?>>2x6 (12)</option>
                                         <option value="3x2" <?php selected($settings['grids']['tablet'], '3x2'); ?>>3x2 (6)</option>
                                         <option value="3x3" <?php selected($settings['grids']['tablet'], '3x3'); ?>>3x3 (9)</option>
                                         <option value="3x4" <?php selected($settings['grids']['tablet'], '3x4'); ?>>3x4 (12)</option>
                                         <option value="3x5" <?php selected($settings['grids']['tablet'], '3x5'); ?>>3x5 (15)</option>
                                         <option value="4x2" <?php selected($settings['grids']['tablet'], '4x2'); ?>>4x2 (8)</option>
                                         <option value="4x3" <?php selected($settings['grids']['tablet'], '4x3'); ?>>4x3 (12)</option>
+                                        <option value="4x4" <?php selected($settings['grids']['tablet'], '4x4'); ?>>4x4 (16)</option>
                                         <option value="4x5" <?php selected($settings['grids']['tablet'], '4x5'); ?>>4x5 (20)</option>
                                         <option value="5x3" <?php selected($settings['grids']['tablet'], '5x3'); ?>>5x3 (15)</option>
                                         <option value="5x4" <?php selected($settings['grids']['tablet'], '5x4'); ?>>5x4 (20)</option>
@@ -93,12 +103,17 @@ class NSMHS_SettingsPage {
                                 <th scope="row"><?php echo esc_html(__('スマホ', 'ns-media-hero-showcase')); ?></th>
                                 <td>
                                     <select name="grids[phone]" id="grid-phone">
+                                        <option value="2x3" <?php selected($settings['grids']['phone'], '2x3'); ?>>2x3 (6)</option>
+                                        <option value="2x4" <?php selected($settings['grids']['phone'], '2x4'); ?>>2x4 (8)</option>
+                                        <option value="2x5" <?php selected($settings['grids']['phone'], '2x5'); ?>>2x5 (10)</option>
+                                        <option value="2x6" <?php selected($settings['grids']['phone'], '2x6'); ?>>2x6 (12)</option>
                                         <option value="3x2" <?php selected($settings['grids']['phone'], '3x2'); ?>>3x2 (6)</option>
                                         <option value="3x3" <?php selected($settings['grids']['phone'], '3x3'); ?>>3x3 (9)</option>
                                         <option value="3x4" <?php selected($settings['grids']['phone'], '3x4'); ?>>3x4 (12)</option>
                                         <option value="3x5" <?php selected($settings['grids']['phone'], '3x5'); ?>>3x5 (15)</option>
                                         <option value="4x2" <?php selected($settings['grids']['phone'], '4x2'); ?>>4x2 (8)</option>
                                         <option value="4x3" <?php selected($settings['grids']['phone'], '4x3'); ?>>4x3 (12)</option>
+                                        <option value="4x4" <?php selected($settings['grids']['phone'], '4x4'); ?>>4x4 (16)</option>
                                         <option value="4x5" <?php selected($settings['grids']['phone'], '4x5'); ?>>4x5 (20)</option>
                                         <option value="5x3" <?php selected($settings['grids']['phone'], '5x3'); ?>>5x3 (15)</option>
                                         <option value="5x4" <?php selected($settings['grids']['phone'], '5x4'); ?>>5x4 (20)</option>
