@@ -40,6 +40,14 @@ class NSMHS_Block {
                     'type' => 'string',
                     'enum' => ['aboveTitle', 'belowCTA'],
                     'default' => 'aboveTitle'
+                ],
+                'contentScale' => [
+                    'type' => 'number',
+                    'default' => 100
+                ],
+                'scaleDesktopOnly' => [
+                    'type' => 'boolean',
+                    'default' => false
                 ]
             ]
         ]);

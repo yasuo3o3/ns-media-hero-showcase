@@ -47,7 +47,7 @@
 
         edit: function(props) {
             const { attributes, setAttributes } = props;
-            const { tempMedia, fullViewport, logoPosition } = attributes;
+            const { tempMedia, fullViewport, logoPosition, contentScale, scaleDesktopOnly } = attributes;
 
             const onSelectMedia = (media) => {
                 const newMedia = media.map(item => ({
@@ -69,9 +69,13 @@
             const editorClasses = ['nsmhs-block-editor'];
             if (fullViewport) editorClasses.push('is-full-viewport');
             if (logoPosition === 'belowCTA') editorClasses.push('logo-below-cta');
+            if (scaleDesktopOnly) editorClasses.push('scale-desktop-only');
 
             return el('div', {
-                className: editorClasses.join(' ')
+                className: editorClasses.join(' '),
+                style: {
+                    '--hero-scale': contentScale / 100
+                }
             }, [
                 // Inspector Controls
                 el(InspectorControls, {
@@ -165,6 +169,33 @@
                             ],
                             onChange: (value) => setAttributes({ logoPosition: value }),
                             key: 'logo-position'
+                        }),
+
+                        el(RangeControl, {
+                            label: '表示倍率（%）',
+                            value: contentScale,
+                            min: 70,
+                            max: 100,
+                            step: 1,
+                            help: '推奨80–100%',
+                            onChange: (value) => setAttributes({ contentScale: Math.max(70, Math.min(100, value)) }),
+                            key: 'content-scale-range'
+                        }),
+
+                        el(NumberControl, {
+                            label: '表示倍率（数値入力）',
+                            value: contentScale,
+                            min: 70,
+                            max: 100,
+                            onChange: (value) => setAttributes({ contentScale: Math.max(70, Math.min(100, parseInt(value) || 100)) }),
+                            key: 'content-scale-number'
+                        }),
+
+                        el(ToggleControl, {
+                            label: 'モバイルは常に100%',
+                            checked: scaleDesktopOnly,
+                            onChange: (value) => setAttributes({ scaleDesktopOnly: value }),
+                            key: 'scale-desktop-only'
                         })
                     ])
                 ]),

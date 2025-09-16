@@ -22,6 +22,8 @@ class NSMHS_Render {
         $settings = $this->config->get_settings();
         $full_viewport = isset($atts['fullViewport']) ? $atts['fullViewport'] : false;
         $logo_position = isset($atts['logoPosition']) ? $atts['logoPosition'] : 'aboveTitle';
+        $content_scale = isset($atts['contentScale']) ? max(70, min(100, $atts['contentScale'])) : 100;
+        $scale_desktop_only = isset($atts['scaleDesktopOnly']) ? $atts['scaleDesktopOnly'] : false;
 
         if (empty($settings['media'])) {
             return '<div class="nsmhs-placeholder">' .
@@ -33,11 +35,17 @@ class NSMHS_Render {
 
         // Generate CSS custom properties
         $css_vars = $this->generate_css_vars($settings);
+        $css_vars .= ' --hero-scale: ' . ($content_scale / 100) . ';';
 
         ob_start();
+        $hero_classes = 'ns-hero';
+        if ($full_viewport) $hero_classes .= ' is-full-viewport';
+        if ($logo_position === 'belowCTA') $hero_classes .= ' logo-below-cta';
+        if ($scale_desktop_only) $hero_classes .= ' scale-desktop-only';
+
         ?>
         <div id="<?php echo esc_attr($id); ?>"
-             class="ns-hero<?php echo $full_viewport ? ' is-full-viewport' : ''; ?><?php echo $logo_position === 'belowCTA' ? ' logo-below-cta' : ''; ?>"
+             class="<?php echo esc_attr($hero_classes); ?>"
              role="region"
              aria-label="<?php echo esc_attr__('Hero showcase', 'ns-media-hero-showcase'); ?>"
              style="<?php echo esc_attr($css_vars); ?>"
@@ -73,7 +81,7 @@ class NSMHS_Render {
 
             <!-- Top Layer -->
             <div class="nsmhs-top-layer">
-                <div class="nsmhs-content-container">
+                <div class="nsmhs-content-container hero-content">
                     <?php if ($logo_position === 'aboveTitle' && (!empty($settings['layers']['top']['logoSrc']) || !empty($settings['layers']['top']['logoId']))): ?>
                     <div class="nsmhs-logo">
                         <?php echo $this->render_logo($settings['layers']['top']); ?>

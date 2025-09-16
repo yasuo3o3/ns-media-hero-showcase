@@ -27,7 +27,11 @@
 .nsmhs-hero-showcase {
   position: relative;
   width: 100%;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
   overflow: hidden;
+  overflow-x: clip;
   background: #000;
 }
 
@@ -47,6 +51,20 @@
 /* ロゴ位置変更時の調整 */
 .ns-hero.logo-below-cta .nsmhs-logo {
   margin-top: 1rem;
+}
+
+/* コンテンツスケール */
+.hero-content {
+  transform: scale(var(--hero-scale, 1));
+  transform-origin: center;
+  will-change: transform;
+}
+
+/* モバイルは常に100%スケール */
+@media (max-width: 768px) {
+  .ns-hero.scale-desktop-only .hero-content {
+    transform: scale(1);
+  }
 }
 
 /* Dynamic aspect-ratio based on grid configuration */
