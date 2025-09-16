@@ -8,7 +8,7 @@
     const { registerBlockType } = wp.blocks;
     const { createElement: el, useState, Fragment } = wp.element;
     const { InspectorControls, MediaUpload, MediaUploadCheck } = wp.blockEditor;
-    const { PanelBody, ExternalLink, Button, Notice, ToggleControl, SelectControl } = wp.components;
+    const { PanelBody, ExternalLink, Button, Notice, ToggleControl, SelectControl, RangeControl, __experimentalNumberControl: NumberControl } = wp.components;
 
     registerBlockType('nsmhs/hero-showcase', {
         title: nsmhsBlock.strings.title,
@@ -34,6 +34,14 @@
                 type: 'string',
                 enum: ['aboveTitle', 'belowCTA'],
                 default: 'aboveTitle'
+            },
+            contentScale: {
+                type: 'number',
+                default: 100
+            },
+            scaleDesktopOnly: {
+                type: 'boolean',
+                default: false
             }
         },
 
